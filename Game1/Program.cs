@@ -1,4 +1,6 @@
 ﻿using System;
+using System.Text;
+using System.Threading.Tasks;
 
 namespace Game1
 {
@@ -7,6 +9,7 @@ namespace Game1
         [STAThread]
         static void Main()
         {
+            Communicator.Setup();
             using (var game = new Game1())
                 game.Run();
         }

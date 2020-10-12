@@ -127,6 +127,7 @@ namespace Game1
                     _animationManager.Play(_animations["FallLeft"]);
                 else
                     _animationManager.Play(_animations["FallRight"]);
+                Communicator.Send("Fall");
             }
 
             else if (Velocity.Y < 0)
@@ -135,16 +136,19 @@ namespace Game1
                     _animationManager.Play(_animations["JumpLeft"]);
                 else
                     _animationManager.Play(_animations["JumpRight"]);
+                Communicator.Send("Jump");
             }
 
             else if (Velocity.X > 0)
             {
                 _animationManager.Play(_animations["RunRight"]);
+                Communicator.Send("RunRight");
             }
 
             else if (Velocity.X < 0)
             {
                 _animationManager.Play(_animations["RunLeft"]);
+                Communicator.Send("RunLeft");
             }
 
             else if (_attack1)
@@ -152,10 +156,12 @@ namespace Game1
                 if (!_direction)
                 {
                     _animationManager.Play(_animations["Attack1Left"]);
+                    Communicator.Send("Attack1Left");
                 }
                 else
                 {
                     _animationManager.Play(_animations["Attack1Right"]);
+                    Communicator.Send("Attack1Right");
                 }
             }
 
@@ -164,10 +170,12 @@ namespace Game1
                 if (!_direction)
                 {
                     _animationManager.Play(_animations["AttackLeft"]);
+                    Communicator.Send("AttackLeft");
                 }
                 else
                 {
                     _animationManager.Play(_animations["AttackRight"]);
+                    Communicator.Send("AttackRight");
                 }
             }
 
@@ -177,6 +185,7 @@ namespace Game1
                     _animationManager.Play(_animations["IdleRight"]);
                 else
                     _animationManager.Play(_animations["IdleLeft"]);
+                Communicator.Send("Idle");
             }
                 
         }
