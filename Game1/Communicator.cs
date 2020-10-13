@@ -52,5 +52,10 @@ namespace Game1
                 Console.WriteLine(e.Message); 
             }
         }
+
+        public static void SendMovementRequest(string where)
+        {
+            Send("100" + "&" + "p1" + "&" + where);
+        }
     }
 }

@@ -40,6 +40,8 @@ namespace GameServer
                         data = Encoding.ASCII.GetString(bytes,
                                                    0, numByte);
 
+                        
+
                         Console.WriteLine("Action executed: " + data);
                     }
 
@@ -55,6 +57,47 @@ namespace GameServer
             catch (Exception e)
             {
                 Console.WriteLine(e.ToString());
+            }
+        }
+
+        public void SendMovementResponse()
+        {
+
+        }
+
+        public void SendAttack1Response()
+        {
+
+        }
+
+        public void SendAttack2Response()
+        {
+
+        }
+
+        public void SendJumpResponse()
+        {
+
+        }
+
+        public void ManageRequest(string req)
+        {
+            string[] chain = req.Split(new char[]{'&'});
+            int code = int.Parse(chain[0]);
+            switch(code)
+            {
+                case 100:
+                    SendMovementResponse();
+                    break;
+                case 101:
+                    SendAttack1Response();
+                    break;
+                case 102:
+                    SendAttack2Response();
+                    break;
+                case 103:
+                    SendJumpResponse();
+                    break;
             }
         }
     

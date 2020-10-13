@@ -142,13 +142,13 @@ namespace Game1
             else if (Velocity.X > 0)
             {
                 _animationManager.Play(_animations["RunRight"]);
-                Communicator.Send("RunRight");
+                Communicator.SendMovementRequest("r");
             }
 
             else if (Velocity.X < 0)
             {
                 _animationManager.Play(_animations["RunLeft"]);
-                Communicator.Send("RunLeft");
+                Communicator.SendMovementRequest("l");
             }
 
             else if (_attack1)
