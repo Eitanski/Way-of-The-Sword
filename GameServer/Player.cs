@@ -24,14 +24,30 @@ namespace GameServer
 
         public float Speed = 5f;
 
-        public Vector2 Velocity;
+        public Vector2 Velocity = Vector2.Zero;
 
         public Vector2 Acceleration = new Vector2(0f, 2f);
 
-        public void Update()
+        public void Move(string dir)
         {
-
+            if (dir == "r")
+            {
+                Velocity.X = Speed;
+                _direction = true;
+            }
+            else
+            {
+                Velocity.X = -Speed;
+                _direction = false;
+            }
         }
+
+        public bool CanMove(string dir)
+        {
+            return !_stun;
+        }
+
+       
 
 
     }

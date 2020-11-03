@@ -53,9 +53,31 @@ namespace Game1
             }
         }
 
+        public static string[] Receive() // returns the response in a string array
+        {
+            byte[] bytes = new Byte[1024];
+            int numByte = client.Receive(bytes);
+            return Encoding.ASCII.GetString(bytes, 0, numByte).Split(new char[] { '&' }); 
+        }
+
         public static void SendMovementRequest(string where)
         {
             Send("100" + "&" + "p1" + "&" + where);
+        }
+
+        public static void SendAttack1Request()
+        {
+            Send("101" + "&" + "p1");
+        }
+
+        public static void SendAttack2Request()
+        {
+            Send("102" + "&" + "p1");
+        }
+
+        public static void SendJumpRequest(string where)
+        {
+            Send("103" + "&" + "p1" + "&" + where);
         }
     }
 }

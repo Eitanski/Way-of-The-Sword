@@ -5,6 +5,7 @@ using System.Collections.Generic;
 using System.Text;
 using Microsoft.Xna.Framework.Input;
 using System.Linq;
+using Microsoft.VisualBasic.FileIO;
 
 namespace Game1
 {
@@ -28,9 +29,7 @@ namespace Game1
 
         private bool _stun = false;
 
-        private bool _attack1 = false;  
-
-        private bool _attack2 = false;
+        private bool idle = false;
 
         #endregion
 
@@ -71,8 +70,33 @@ namespace Game1
             else throw new Exception("This ain't right..!");
         }
 
-        public virtual void Move()
+        public virtual void DoAction()
         {
+            if (Keyboard.GetState().IsKeyDown(Input.Left))
+            {
+                Communicator.SendMovementRequest("l");
+            }
+            else if (Keyboard.GetState().IsKeyDown(Input.Right))
+            {
+                Communicator.SendMovementRequest("r");
+            }
+            else if (Keyboard.GetState().IsKeyDown(Input.Attack1))
+            {
+                Communicator.SendAttack1Request();
+            }
+            else if (Keyboard.GetState().IsKeyDown(Input.Attack2))
+            {
+                Communicator.SendAttack2Request();
+            }
+            else if (Keyboard.GetState().IsKeyDown(Input.Jump))
+            {
+                Communicator.SendJumpRequest("r");
+            }
+            else
+            {
+                idle = true;
+            }
+            /*
             if(_air)
             {
                 Velocity += Acceleration;
@@ -116,11 +140,56 @@ namespace Game1
                     _direction = true;
                 }
             }
+            */
         }
 
         protected virtual void SetAnimations()
         {
+            string[] chain;
+            int code;
+            if (idle)
+            {
+                if(_direction)
+                    _animationManager.Play(_animations["IdleRight"]);
+                else
+                    _animationManager.Play(_animations["IdleLeft"]);
+                idle = !idle;
+            }
+            else
+            {
+                chain = Communicator.Receive();
+                if (chain[0] == "1")
+                {
+                    code = int.Parse(chain[1]);
+                    switch (code)
+                    {
+                        case 200:
+                            if (chain[3] == "r")
+                            {
+                                _animationManager.Play(_animations["RunRight"]);
+                                Velocity.X = Speed;
+                                _direction = true;
+                            }
+                            else
+                            {
+                                _animationManager.Play(_animations["RunLeft"]);
+                                Velocity.X = -Speed;
+                                _direction = false;
+                            }
+                            break;
+                        case 201:
+                            break;
+                        case 202:
+                            break;
+                        case 203:
+                            break;
+                        default:
+                            break;
+                    }
+                }
+            }
 
+            /*
             if (Velocity.Y > 0)
             {
                 if (!_direction)
@@ -187,7 +256,8 @@ namespace Game1
                     _animationManager.Play(_animations["IdleLeft"]);
                 Communicator.Send("Idle");
             }
-                
+            */
+
         }
 
         public Sprite(Dictionary<string, Animation> animations)
@@ -204,27 +274,27 @@ namespace Game1
         public virtual void Update(GameTime gameTime)
         {
 
-            Move();
+            DoAction();
 
             SetAnimations();
 
             _animationManager.Update(gameTime);
 
-            if(_stun)
-            {
-                if (_animationManager._ended)
-                {
-                    _animationManager.Stop();
-                    if(_direction)
-                        _animationManager.Play(_animations["IdleRight"]);
-                    else
-                        _animationManager.Play(_animations["IdleLeft"]);
-
-                    _stun = false;
-                    _attack1 = false;
-                    _attack2 = false;
-                }
-            }
+            //if(_stun)
+            //{
+            //    if (_animationManager._ended)
+            //    {
+            //        _animationManager.Stop();
+            //        if(_direction)
+            //            _animationManager.Play(_animations["IdleRight"]);
+            //        else
+            //            _animationManager.Play(_animations["IdleLeft"]);
+            //
+            //        _stun = false;
+            //        _attack1 = false;
+            //        _attack2 = false;
+            //    }
+            //}
 
             Position += Velocity;
 
