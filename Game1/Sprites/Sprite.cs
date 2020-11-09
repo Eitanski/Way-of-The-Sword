@@ -29,6 +29,10 @@ namespace Game1
 
         private bool _stun = false;
 
+        private bool _attack1 = false;
+
+        private bool _attack2 = false;
+
         private bool idle = false;
 
         #endregion
@@ -70,43 +74,98 @@ namespace Game1
             else throw new Exception("This ain't right..!");
         }
 
-        public virtual void DoAction()
+        public void BandAid()
         {
-            if (Keyboard.GetState().IsKeyDown(Input.Left))
+            
+            if (Velocity.Y > 0)
             {
-                Communicator.SendMovementRequest("l");
+                if (!_direction)
+                    _animationManager.Play(_animations["FallLeft"]);
+                else
+                    _animationManager.Play(_animations["FallRight"]);
             }
-            else if (Keyboard.GetState().IsKeyDown(Input.Right))
+            else if (Velocity.Y < 0)
             {
-                Communicator.SendMovementRequest("r");
+                if (!_direction)
+                    _animationManager.Play(_animations["JumpLeft"]);
+                else
+                    _animationManager.Play(_animations["JumpRight"]);
             }
-            else if (Keyboard.GetState().IsKeyDown(Input.Attack1))
+            else if (_attack1)
             {
-                Communicator.SendAttack1Request();
-            }
-            else if (Keyboard.GetState().IsKeyDown(Input.Attack2))
-            {
-                Communicator.SendAttack2Request();
-            }
-            else if (Keyboard.GetState().IsKeyDown(Input.Jump))
-            {
-                Communicator.SendJumpRequest("r");
-            }
-            else
-            {
-                idle = true;
-            }
-            /*
-            if(_air)
-            {
-                Velocity += Acceleration;
-                if(Position.Y >= _relativePos)
+                if (!_direction)
                 {
-                    _air = false;
-                    Velocity = Vector2.Zero;
+                    _animationManager.Play(_animations["Attack1Left"]);
+                }
+                else
+                {
+                    _animationManager.Play(_animations["Attack1Right"]);
+                }
+            }
+            else if (_attack2)
+            {
+                if (!_direction)
+                {
+                    _animationManager.Play(_animations["AttackLeft"]);
+                }
+                else
+                {
+                    _animationManager.Play(_animations["AttackRight"]);
                 }
             }
 
+
+        }
+
+        public void BandAid2()
+        {
+            if (_stun)
+            {
+                Communicator.Send("bandaid2 executed");
+                if (_animationManager._ended)
+                {
+                    _animationManager.Stop();
+                    idle = true;
+
+                    _stun = false;
+                    _attack1 = false;
+                    _attack2 = false;
+                }
+            }
+        }
+
+
+        public virtual void DoAction()
+        {
+            if (!_stun)
+            {
+                if (Keyboard.GetState().IsKeyDown(Input.Jump) && !_air)
+                {
+                    Communicator.SendJumpRequest();
+                }
+                else if (Keyboard.GetState().IsKeyDown(Input.Left))
+                {
+                    Communicator.SendMovementRequest("l");
+                }
+                else if (Keyboard.GetState().IsKeyDown(Input.Right))
+                {
+                    Communicator.SendMovementRequest("r");
+                }
+                else if (Keyboard.GetState().IsKeyDown(Input.Attack1))
+                {
+                    Communicator.SendAttack1Request();
+                }
+                else if (Keyboard.GetState().IsKeyDown(Input.Attack2))
+                {
+                    Communicator.SendAttack2Request();
+                }
+                else
+                {
+                    idle = true;
+                }
+            }
+            
+            /*
             if (!_stun)
             {
                 if ((Keyboard.GetState().IsKeyDown(Input.Up) || Keyboard.GetState().IsKeyDown(Input.Jump)) && !_air)
@@ -147,6 +206,18 @@ namespace Game1
         {
             string[] chain;
             int code;
+
+            if (_air)
+            {
+                Velocity += Acceleration;
+                if (Position.Y >= _relativePos)
+                {
+                    _air = false;
+                    Velocity = Vector2.Zero;
+                }
+            }
+
+
             if (idle)
             {
                 if(_direction)
@@ -163,7 +234,7 @@ namespace Game1
                     code = int.Parse(chain[1]);
                     switch (code)
                     {
-                        case 200:
+                        case 200: // move
                             if (chain[3] == "r")
                             {
                                 _animationManager.Play(_animations["RunRight"]);
@@ -177,13 +248,18 @@ namespace Game1
                                 _direction = false;
                             }
                             break;
-                        case 201:
+                        case 201: // attack1
+                            _stun = true;
+                            _attack1 = true;
                             break;
-                        case 202:
+                        case 202: // attack2
+                            _stun = true;
+                            _attack2 = true;
                             break;
-                        case 203:
-                            break;
-                        default:
+                        case 203: // jump
+                            _air = true;
+                            _relativePos = Position.Y;
+                            Velocity.Y = -Speed - 20f;  
                             break;
                     }
                 }
@@ -278,24 +354,12 @@ namespace Game1
 
             SetAnimations();
 
+            BandAid();
+
             _animationManager.Update(gameTime);
 
-            //if(_stun)
-            //{
-            //    if (_animationManager._ended)
-            //    {
-            //        _animationManager.Stop();
-            //        if(_direction)
-            //            _animationManager.Play(_animations["IdleRight"]);
-            //        else
-            //            _animationManager.Play(_animations["IdleLeft"]);
-            //
-            //        _stun = false;
-            //        _attack1 = false;
-            //        _attack2 = false;
-            //    }
-            //}
-
+            BandAid2();
+        
             Position += Velocity;
 
             Velocity.X = 0;

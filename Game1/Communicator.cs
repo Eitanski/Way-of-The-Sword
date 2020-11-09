@@ -75,9 +75,9 @@ namespace Game1
             Send("102" + "&" + "p1");
         }
 
-        public static void SendJumpRequest(string where)
+        public static void SendJumpRequest()
         {
-            Send("103" + "&" + "p1" + "&" + where);
+            Send("103" + "&" + "p1");
         }
     }
 }

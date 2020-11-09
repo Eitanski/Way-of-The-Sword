@@ -84,22 +84,22 @@ namespace GameServer
 
         public void SendAttack1Response(Player player)
         {
-            
+            Send("1" + "&" + "201" + "&" + "p1");
         }
 
         public void SendAttack2Response(Player player)
         {
-
+            Send("1" + "&" + "202" + "&" + "p1");
         }
 
         public void SendJumpResponse(Player player)
         {
-
+            Send("1" + "&" + "203" + "&" + "p1");
         }
 
         public void ManageRequest(string req)
         {
-            //Console.WriteLine("received: " + req);
+            Console.WriteLine("received: " + req);
             string[] chain = req.Split(new char[]{'&'});
             int code = int.Parse(chain[0]);
             switch(code)
