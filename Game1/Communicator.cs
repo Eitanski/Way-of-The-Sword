@@ -27,7 +27,7 @@ namespace Game1
 
                 Console.WriteLine("client connected to -> {0} ",
                               client.RemoteEndPoint.ToString());
-                
+
                 //byte[] messageReceived = new byte[1024];
                 //int byteRecv = client.Receive(messageReceived);
                 //Console.WriteLine("Message from Server -> {0}",
@@ -47,9 +47,9 @@ namespace Game1
                 byte[] message = Encoding.ASCII.GetBytes(msg);
                 client.Send(message);
             }
-            catch (Exception e) 
-            { 
-                Console.WriteLine(e.Message); 
+            catch (Exception e)
+            {
+                Console.WriteLine(e.Message);
             }
         }
 
@@ -57,9 +57,19 @@ namespace Game1
         {
             byte[] bytes = new Byte[1024];
             int numByte = client.Receive(bytes);
-            return Encoding.ASCII.GetString(bytes, 0, numByte).Split(new char[] { '&' }); 
+            return Encoding.ASCII.GetString(bytes, 0, numByte).Split(new char[] { '&' });
         }
 
+        public static void SendEndofStun()
+        {
+            Send("300" + "&" + "p1");
+        }
+
+        public static void SendEndofAir()
+        {
+            Send("400" + "&" + "p1");
+        }
+        
         public static void SendMovementRequest(string where)
         {
             Send("100" + "&" + "p1" + "&" + where);

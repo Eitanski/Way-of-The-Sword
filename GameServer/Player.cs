@@ -9,14 +9,11 @@ using System.Numerics;
 namespace GameServer
 {
     class Player
-    {
-        private bool _air = false;
+    {   
 
         private float _relativePos;
 
         private bool _direction = true; // right - true, left - false
-
-        private bool _stun = false;
 
         private bool _attack1 = false;
 
@@ -27,6 +24,10 @@ namespace GameServer
         public Vector2 Velocity = Vector2.Zero;
 
         public Vector2 Acceleration = new Vector2(0f, 2f);
+
+        public bool Stun = false;
+
+        public bool Air = false;
 
         public void Move(string dir)
         {
@@ -42,9 +43,9 @@ namespace GameServer
             }
         }
 
-        public bool CanMove(string dir)
+        public bool Stunned(string dir)
         {
-            return !_stun;
+            return Stun;
         }
 
        
