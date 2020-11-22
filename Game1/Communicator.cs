@@ -44,7 +44,7 @@ namespace Game1
         {
             try
             {
-                byte[] message = Encoding.ASCII.GetBytes(msg);
+                byte[] message = Encoding.ASCII.GetBytes(msg + "1" + "e");
                 client.Send(message);
             }
             catch (Exception e)
@@ -55,39 +55,56 @@ namespace Game1
 
         public static string[] Receive() // returns the response in a string array
         {
-            byte[] bytes = new Byte[1024];
-            int numByte = client.Receive(bytes);
-            return Encoding.ASCII.GetString(bytes, 0, numByte).Split(new char[] { '&' });
+            byte[] buffer = new byte[1024];
+            string part, chain = "";
+
+            int numByte = client.Receive(buffer, 1, SocketFlags.None), len;
+            part = Encoding.ASCII.GetString(buffer, 0, numByte);
+            chain += part + "&";
+            numByte = client.Receive(buffer, 3, SocketFlags.None);
+            part = Encoding.ASCII.GetString(buffer, 0, numByte);
+            while (part != "e")
+            {
+                chain += part + "&";
+                numByte = client.Receive(buffer, 1, SocketFlags.None); // read len
+                len = int.Parse(Encoding.ASCII.GetString(buffer, 0, numByte));
+                numByte = client.Receive(buffer, len, SocketFlags.None);
+                part = Encoding.ASCII.GetString(buffer, 0, numByte);
+            }
+
+            Console.WriteLine("received client: " + chain);
+
+            return chain.Substring(0, chain.Length - 1).Split(new char[] { '&' });
         }
 
         public static void SendEndofStun()
         {
-            Send("300" + "&" + "p1");
+            Send("300" + "2" + "p1");
         }
 
         public static void SendEndofAir()
         {
-            Send("400" + "&" + "p1");
+            Send("400" + "2" + "p1");
         }
         
         public static void SendMovementRequest(string where)
         {
-            Send("100" + "&" + "p1" + "&" + where);
+            Send("100" + "2" + "p1" + "1" + where);
         }
 
         public static void SendAttack1Request()
         {
-            Send("101" + "&" + "p1");
+            Send("101" + "2" + "p1");
         }
 
         public static void SendAttack2Request()
         {
-            Send("102" + "&" + "p1");
+            Send("102" + "2" + "p1");
         }
 
         public static void SendJumpRequest()
         {
-            Send("103" + "&" + "p1");
+            Send("103" + "2" + "p1");
         }
     }
 }

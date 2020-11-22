@@ -28,48 +28,63 @@ namespace GameServer
                 listener.Bind(localEndPoint);
                 listener.Listen(10);
 
+                Console.WriteLine("Waiting connection ... ");
+                clientSocket = listener.Accept();
+                string data;
+                
                 while (true)
                 {
-                    Console.WriteLine("Waiting connection ... ");
-                    clientSocket = listener.Accept();
-                    string data;
-                    
-                    while (true)
-                    {
-                        data = receive(clientSocket);
+                    data = Receive(clientSocket);
+                    if(data != "")
                         ManageRequest(data);
-                        //Console.WriteLine("Action executed: " + data);
-                    }
+                   
+                }
 
                     //clientSocket.Shutdown(SocketShutdown.Both);
                     //clientSocket.Close();
-                }
+                
             }
 
             catch (Exception e)
             {
                 Console.WriteLine(e.ToString());
+                Console.ReadLine();
             }
         }
 
-        private string receive(Socket soc)
+
+
+        private string Receive(Socket soc)
         {
-            byte[] bytes = new Byte[1024];
-            int numByte = soc.Receive(bytes);
-            return Encoding.ASCII.GetString(bytes, 0, numByte);
+            byte[] buffer = new byte[1024];
+            string part, chain = "";
+
+            int numByte = soc.Receive(buffer, 3, SocketFlags.None), len;
+            part = Encoding.ASCII.GetString(buffer, 0, numByte);
+            while(part != "e")
+            {
+                chain += part + "&";
+                numByte = soc.Receive(buffer, 1, SocketFlags.None); // read len
+                len = int.Parse(Encoding.ASCII.GetString(buffer, 0, numByte));
+                numByte = soc.Receive(buffer, len, SocketFlags.None);
+                part = Encoding.ASCII.GetString(buffer, 0, numByte);
+            }
+
+            return chain.Substring(0, chain.Length - 1); 
         }
         
         private void Send(string msg)
         {
             try
             {
-                byte[] message = Encoding.ASCII.GetBytes(msg);
-                Console.WriteLine("Sent: " + msg);
+                byte[] message = Encoding.ASCII.GetBytes(msg + "1" + "e");
+                //Console.WriteLine("Sent: " + msg);
                 clientSocket.Send(message);
             }
             catch (Exception e)
             {
                 Console.WriteLine(e.Message);
+                Console.ReadLine();
             }
         }
 
@@ -77,26 +92,25 @@ namespace GameServer
         {
             if (player.Stun)
             {
-                Send("0" + "&" + "200" + "&" + "p1" + "&" + dir);
+                Send("0" + "200" + "2" + "p1" + "1" + dir);
             }
             else
             {
                 player.Move(dir);
-                Send("1" + "&" + "200" + "&" + "p1" + "&" + dir);
-            }
-            
+                Send("1" + "200" + "2" + "p1" + "1" + dir);
+            } 
         }
 
         public void SendAttack1Response(Player player)
         {
             if (player.Stun || player.Air)
             {
-                Send("0" + "&" + "201" + "&" + "p1");
+                Send("0" + "201" + "2" + "p1");
             }
             else
             {
                 player.Stun = true;
-                Send("1" + "&" + "201" + "&" + "p1");
+                Send("1" + "201" + "2" + "p1");
             }
             
         }
@@ -105,22 +119,22 @@ namespace GameServer
         {
             if (player.Stun || player.Air)
             {
-                Send("0" + "&" + "202" + "&" + "p1");
+                Send("0" + "202" + "2" + "p1");
             }
             else
             {
                 player.Stun = true;
-                Send("1" + "&" + "202" + "&" + "p1");
+                Send("1" + "202" + "2" + "p1");
             }
         }
 
         public void SendJumpResponse(Player player)
         {
             if (player.Stun || player.Air)
-                Send("0" + "&" + "203" + "&" + "p1");
+                Send("0" + "203" + "2" + "p1");
             else
             {
-                Send("1" + "&" + "203" + "&" + "p1");
+                Send("1" + "203" + "2" + "p1");
                 player.Air = true;
             }
         }

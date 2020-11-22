@@ -35,6 +35,8 @@ namespace Game1
 
         private bool idle = false;
 
+        private int count = 0;
+
         #endregion
 
         #region Properties
@@ -91,8 +93,9 @@ namespace Game1
                 else
                     _animationManager.Play(_animations["JumpRight"]);
             }
-            else if (_attack1)
+            else if (_attack1 && !_stun)
             {
+                _stun = true;
                 if (!_direction)
                 {
                     _animationManager.Play(_animations["Attack1Left"]);
@@ -102,8 +105,9 @@ namespace Game1
                     _animationManager.Play(_animations["Attack1Right"]);
                 }
             }
-            else if (_attack2)
+            else if (_attack2 && !_stun)
             {
+                _stun = true;
                 if (!_direction)
                 {
                     _animationManager.Play(_animations["AttackLeft"]);
@@ -113,8 +117,6 @@ namespace Game1
                     _animationManager.Play(_animations["AttackRight"]);
                 }
             }
-
-
         }
 
         public void BandAid2()
@@ -125,6 +127,7 @@ namespace Game1
                 {
                     _animationManager.Stop();
                     Communicator.SendEndofStun();
+                    Console.WriteLine("sent end of stun " + ++count + " client stun: " + !_stun);
                     idle = true;
 
                     _stun = false;
@@ -160,7 +163,7 @@ namespace Game1
             else
             {
                 idle = true;
-            }
+            }  
         }
 
         protected virtual void SetAnimations()
@@ -192,7 +195,7 @@ namespace Game1
                 }
                 else
                 {
-                    chain = Communicator.Receive();
+                    chain = Communicator.Receive();             
                     if (chain[0] == "1")
                     {
                         code = int.Parse(chain[1]);
@@ -213,11 +216,11 @@ namespace Game1
                                 }
                                 break;
                             case 201: // attack1
-                                _stun = true;
+                                //_stun = true;
                                 _attack1 = true;
                                 break;
                             case 202: // attack2
-                                _stun = true;
+                                //_stun = true;
                                 _attack2 = true;
                                 break;
                             case 203: // jump
@@ -229,9 +232,6 @@ namespace Game1
                     }
                 }
             }
-
-          
-
         }
 
         public Sprite(Dictionary<string, Animation> animations)
