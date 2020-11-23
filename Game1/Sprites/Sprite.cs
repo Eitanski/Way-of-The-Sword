@@ -9,7 +9,7 @@ using Microsoft.VisualBasic.FileIO;
 
 namespace Game1
 {
-    public class Sprite
+    public class Sprite 
     {
         #region Fields
 
@@ -75,10 +75,9 @@ namespace Game1
                 _animationManager.Draw(spriteBatch);
             else throw new Exception("This ain't right..!");
         }
-
+        
         public void BandAid()
         {
-            
             if (Velocity.Y > 0)
             {
                 if (!_direction)
@@ -182,7 +181,6 @@ namespace Game1
                 }
             }
 
-
             if (!_stun)
             {
                 if (idle)
@@ -195,9 +193,9 @@ namespace Game1
                 }
                 else
                 {
-                    chain = Communicator.Receive();             
-                    if (chain[0] == "1")
+                    if (Communicator.CanDo())
                     {
+                        chain = Communicator.GetAction().Split(new char[] { '&' });
                         code = int.Parse(chain[1]);
                         switch (code)
                         {

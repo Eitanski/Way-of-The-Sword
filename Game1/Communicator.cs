@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Text;
 using System.Net.Sockets;
+using System.Threading;
 using System.Net;
 
 namespace Game1
@@ -9,6 +10,10 @@ namespace Game1
     static class Communicator
     {
         private static Socket client;
+
+        private static Queue<string> messages = new Queue<string>();
+
+        private static Mutex mutex = new Mutex();
         public static void clientShutDown()
         {
             client.Shutdown(SocketShutdown.Both);
@@ -38,8 +43,22 @@ namespace Game1
             {
                 Console.WriteLine(e.Message);
             }
+
+       
         }
 
+        public static bool CanDo()
+        {
+            return messages.Count != 0;
+        }
+
+        public static string GetAction()
+        {
+            mutex.WaitOne();
+            string message = messages.Dequeue();
+            mutex.ReleaseMutex();
+            return message;
+        }
         public static void Send(string msg)
         {
             try
@@ -53,28 +72,37 @@ namespace Game1
             }
         }
 
-        public static string[] Receive() // returns the response in a string array
+        public static void Receive() // returns the response in a string array
         {
             byte[] buffer = new byte[1024];
             string part, chain = "";
+            int numByte, len;
 
-            int numByte = client.Receive(buffer, 1, SocketFlags.None), len;
-            part = Encoding.ASCII.GetString(buffer, 0, numByte);
-            chain += part + "&";
-            numByte = client.Receive(buffer, 3, SocketFlags.None);
-            part = Encoding.ASCII.GetString(buffer, 0, numByte);
-            while (part != "e")
+            while (true)
             {
-                chain += part + "&";
-                numByte = client.Receive(buffer, 1, SocketFlags.None); // read len
-                len = int.Parse(Encoding.ASCII.GetString(buffer, 0, numByte));
-                numByte = client.Receive(buffer, len, SocketFlags.None);
+                numByte = client.Receive(buffer, 1, SocketFlags.None); // 0 or 1
                 part = Encoding.ASCII.GetString(buffer, 0, numByte);
+                chain += part + "&";
+                numByte = client.Receive(buffer, 3, SocketFlags.None); // action type
+                part = Encoding.ASCII.GetString(buffer, 0, numByte);
+                while (part != "e")
+                {
+                    chain += part + "&";
+                    numByte = client.Receive(buffer, 1, SocketFlags.None); // read len
+                    len = int.Parse(Encoding.ASCII.GetString(buffer, 0, numByte));
+                    numByte = client.Receive(buffer, len, SocketFlags.None);
+                    part = Encoding.ASCII.GetString(buffer, 0, numByte);
+                }
+
+                Console.WriteLine("received client: " + chain);
+                if (chain[0] == '1')
+                {
+                    mutex.WaitOne();
+                    messages.Enqueue(chain.Substring(0, chain.Length - 1));
+                    mutex.ReleaseMutex();
+                }
+                chain = "";
             }
-
-            Console.WriteLine("received client: " + chain);
-
-            return chain.Substring(0, chain.Length - 1).Split(new char[] { '&' });
         }
 
         public static void SendEndofStun()

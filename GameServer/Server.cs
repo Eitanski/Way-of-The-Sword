@@ -35,9 +35,7 @@ namespace GameServer
                 while (true)
                 {
                     data = Receive(clientSocket);
-                    if(data != "")
-                        ManageRequest(data);
-                   
+                    ManageRequest(data);
                 }
 
                     //clientSocket.Shutdown(SocketShutdown.Both);
