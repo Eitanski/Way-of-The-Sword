@@ -22,7 +22,7 @@ namespace Game1
         protected Texture2D _texture;
 
         private bool _air = false;
-
+            
         private float _relativePos;
 
         private bool _direction = true; // right - true, left - false
@@ -35,7 +35,7 @@ namespace Game1
 
         private bool idle = false;
 
-        private int count = 0;
+        private bool thing = true;
 
         #endregion
 
@@ -126,7 +126,6 @@ namespace Game1
                 {
                     _animationManager.Stop();
                     Communicator.SendEndofStun();
-                    Console.WriteLine("sent end of stun " + ++count + " client stun: " + !_stun);
                     idle = true;
 
                     _stun = false;
@@ -162,7 +161,7 @@ namespace Game1
             else
             {
                 idle = true;
-            }  
+            }
         }
 
         protected virtual void SetAnimations()

@@ -14,7 +14,6 @@ namespace GameServer
     {
         private Player player1 = new Player();
         private Player player2;
-        private Socket clientSocket;
         private int count = 0;
         public void Run()
         {
@@ -29,14 +28,10 @@ namespace GameServer
                 listener.Listen(10);
 
                 Console.WriteLine("Waiting connection ... ");
-                clientSocket = listener.Accept();
-                string data;
-                
-                while (true)
-                {
-                    data = Receive(clientSocket);
-                    ManageRequest(data);
-                }
+                Socket temp = listener.Accept();
+
+                Thread newClient = new Thread(new ParameterizedThreadStart(HandleClient));
+                newClient.Start();
 
                     //clientSocket.Shutdown(SocketShutdown.Both);
                     //clientSocket.Close();
@@ -51,6 +46,11 @@ namespace GameServer
         }
 
 
+        public void HandleClient(Object clientSocket)
+        {
+            while (true)
+                ManageRequest(Receive((Socket)clientSocket), (Socket)clientSocket);
+        }
 
         private string Receive(Socket soc)
         {
@@ -71,7 +71,7 @@ namespace GameServer
             return chain.Substring(0, chain.Length - 1); 
         }
         
-        private void Send(string msg)
+        private void Send(string msg, Socket clientSocket)
         {
             try
             {
@@ -86,75 +86,75 @@ namespace GameServer
             }
         }
 
-        public void SendMovementResponse(Player player, string dir)
+        public void SendMovementResponse(Player player, string dir, Socket clientSocket)
         {
             if (player.Stun)
             {
-                Send("0" + "200" + "2" + "p1" + "1" + dir);
+                Send("0" + "200" + "2" + "p1" + "1" + dir, clientSocket);
             }
             else
             {
                 player.Move(dir);
-                Send("1" + "200" + "2" + "p1" + "1" + dir);
+                Send("1" + "200" + "2" + "p1" + "1" + dir, clientSocket);
             } 
         }
 
-        public void SendAttack1Response(Player player)
+        public void SendAttack1Response(Player player, Socket clientSocket)
         {
             if (player.Stun || player.Air)
             {
-                Send("0" + "201" + "2" + "p1");
+                Send("0" + "201" + "2" + "p1", clientSocket);
             }
             else
             {
                 player.Stun = true;
-                Send("1" + "201" + "2" + "p1");
+                Send("1" + "201" + "2" + "p1", clientSocket);
             }
             
         }
 
-        public void SendAttack2Response(Player player)
+        public void SendAttack2Response(Player player, Socket clientSocket)
         {
             if (player.Stun || player.Air)
             {
-                Send("0" + "202" + "2" + "p1");
+                Send("0" + "202" + "2" + "p1", clientSocket);
             }
             else
             {
                 player.Stun = true;
-                Send("1" + "202" + "2" + "p1");
+                Send("1" + "202" + "2" + "p1", clientSocket);
             }
         }
 
-        public void SendJumpResponse(Player player)
+        public void SendJumpResponse(Player player, Socket clientSocket)
         {
             if (player.Stun || player.Air)
-                Send("0" + "203" + "2" + "p1");
+                Send("0" + "203" + "2" + "p1", clientSocket);
             else
             {
-                Send("1" + "203" + "2" + "p1");
+                Send("1" + "203" + "2" + "p1", clientSocket);
                 player.Air = true;
             }
         }
 
-        public void ManageRequest(string req)
+        public void ManageRequest(string req, Socket clientSocket)
         {
-            Console.WriteLine(++count + " received: " + req + "  server stun: " + player1.Stun + " server air: " + player1.Air);
+            //Console.WriteLine(++count + " received: " + req + "  server stun: " + player1.Stun + " server air: " + player1.Air);
             string[] chain = req.Split(new char[]{'&'});
             int code = int.Parse(chain[0]);
             switch(code)
             {
                 case 100:
-                    SendMovementResponse(player1, chain[2]);
+                    SendMovementResponse(player1, chain[2], clientSocket);
                     break;
                 case 101:
-                    SendAttack1Response(player1);
+                    SendAttack1Response(player1, clientSocket);
                     break;
                 case 102:
-                    SendAttack2Response(player1);
+                    SendAttack2Response(player1, clientSocket);
                     break;
                 case 103:
-                    SendJumpResponse(player1);
+                    SendJumpResponse(player1, clientSocket);
                     break;
                 case 300:
                     player1.Stun = false;
