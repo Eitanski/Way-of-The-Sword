@@ -147,7 +147,7 @@ namespace Game1
                 Communicator.SendAttack1Request();
             }
             else if (Keyboard.GetState().IsKeyDown(Input.Attack2) && !_attack2)
-            {
+            {   
                 Communicator.SendAttack2Request();
             }
             else if (Keyboard.GetState().IsKeyDown(Input.Left))

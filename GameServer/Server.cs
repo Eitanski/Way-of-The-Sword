@@ -14,34 +14,45 @@ namespace GameServer
     {
         private Player player1 = new Player();
         private Player player2;
+        private List<Player> players = new List<Player>();
+        private List<Socket> sockets = new List<Socket>();
         private int count = 0;
         public void Run()
         {
             IPEndPoint localEndPoint = new IPEndPoint(IPAddress.Parse("127.0.0.1"), 11111);
 
-            Socket listener = new Socket(IPAddress.Parse("127.0.0.1").AddressFamily,
-                         SocketType.Stream, ProtocolType.Tcp);
-            try
+            //Socket listener = new Socket(IPAddress.Parse("127.0.0.1").AddressFamily,
+             //            SocketType.Stream, ProtocolType.Tcp);
+
+            while (true)
             {
+                try
+                {
+                    sockets.Add(new Socket(IPAddress.Parse("127.0.0.1").AddressFamily,
+                         SocketType.Stream, ProtocolType.Tcp));
+                    Console.WriteLine("int1");
+                    sockets.Last().Bind(localEndPoint);
+                    Console.WriteLine("int2");
+                    sockets.Last().Listen(10);
 
-                listener.Bind(localEndPoint);
-                listener.Listen(10);
+                    Console.WriteLine("Waiting connection ... ");
+                    Socket temp = sockets.Last().Accept();
 
-                Console.WriteLine("Waiting connection ... ");
-                Socket temp = listener.Accept();
+                    Console.WriteLine("Connected to " + temp.RemoteEndPoint.ToString());
+                    Thread newClient = new Thread(new ParameterizedThreadStart(HandleClient));
+                    newClient.Start(temp);
 
-                Thread newClient = new Thread(new ParameterizedThreadStart(HandleClient));
-                newClient.Start();
 
                     //clientSocket.Shutdown(SocketShutdown.Both);
                     //clientSocket.Close();
-                
-            }
 
-            catch (Exception e)
-            {
-                Console.WriteLine(e.ToString());
-                Console.ReadLine();
+                }
+
+                catch (Exception e)
+                {
+                    Console.WriteLine(e.ToString());
+                    Console.ReadLine();
+                }
             }
         }
 

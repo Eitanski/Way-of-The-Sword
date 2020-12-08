@@ -28,7 +28,7 @@ namespace Game1
                 client = new Socket(IPAddress.Parse("127.0.0.1").AddressFamily,
                            SocketType.Stream, ProtocolType.Tcp);
 
-                client.Connect(localEndPoint);
+                client.Connect(localEndPoint);                  
 
                 Console.WriteLine("client connected to -> {0} ",
                               client.RemoteEndPoint.ToString());
