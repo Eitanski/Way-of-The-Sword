@@ -9,42 +9,31 @@ namespace Game1
 {
     static class Communicator
     {
-        private static Socket client;
+        private static TcpClient client = new TcpClient();
+
+        private static NetworkStream stream;
 
         private static Queue<string> messages = new Queue<string>();
 
         private static Mutex mutex = new Mutex();
+
         public static void clientShutDown()
         {
-            client.Shutdown(SocketShutdown.Both);
+            client.Dispose(); 
             client.Close();
         }
         public static void Setup()
         {
             try
             {
-                IPEndPoint localEndPoint = new IPEndPoint(IPAddress.Parse("127.0.0.1"), 11111);
-
-                client = new Socket(IPAddress.Parse("127.0.0.1").AddressFamily,
-                           SocketType.Stream, ProtocolType.Tcp);
-
-                client.Connect(localEndPoint);                  
-
-                Console.WriteLine("client connected to -> {0} ",
-                              client.RemoteEndPoint.ToString());
-
-                //byte[] messageReceived = new byte[1024];
-                //int byteRecv = client.Receive(messageReceived);
-                //Console.WriteLine("Message from Server -> {0}",
-                //      Encoding.ASCII.GetString(messageReceived,
-                //                                 0, byteRecv));
+                client.Connect("127.0.0.1", 11111);
+                stream = client.GetStream();
+                Console.WriteLine("client connected to: " + client.Client.RemoteEndPoint.ToString());
             }
             catch (Exception e)
             {
                 Console.WriteLine(e.Message);
             }
-
-       
         }
 
         public static bool CanDo()
@@ -64,7 +53,8 @@ namespace Game1
             try
             {
                 byte[] message = Encoding.ASCII.GetBytes(msg + "1" + "e");
-                client.Send(message);
+                stream.Write(message,0,message.Length);
+                stream.Flush();
             }
             catch (Exception e)
             {
@@ -80,17 +70,17 @@ namespace Game1
 
             while (true)
             {
-                numByte = client.Receive(buffer, 1, SocketFlags.None); // 0 or 1
+                numByte = stream.Read(buffer, 0, 1); // 0 or 1
                 part = Encoding.ASCII.GetString(buffer, 0, numByte);
                 chain += part + "&";
-                numByte = client.Receive(buffer, 3, SocketFlags.None); // action type
+                numByte = stream.Read(buffer, 0, 3); // action type
                 part = Encoding.ASCII.GetString(buffer, 0, numByte);
                 while (part != "e")
                 {
                     chain += part + "&";
-                    numByte = client.Receive(buffer, 1, SocketFlags.None); // read len
+                    numByte = stream.Read(buffer, 0, 1); // read len
                     len = int.Parse(Encoding.ASCII.GetString(buffer, 0, numByte));
-                    numByte = client.Receive(buffer, len, SocketFlags.None);
+                    numByte = stream.Read(buffer, 0, len);
                     part = Encoding.ASCII.GetString(buffer, 0, numByte);
                 }
 
