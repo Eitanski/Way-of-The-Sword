@@ -29,6 +29,16 @@ namespace GameServer
 
         public bool Air = false;
 
+        private static int count = 0;
+
+        public int id = ++count;
+
+        public string chunk;
+
+        public Player()
+        {
+            chunk = id.ToString().Length.ToString() + id.ToString();
+        }
         public void Move(string dir)
         {
             if (dir == "r")
@@ -43,11 +53,10 @@ namespace GameServer
             }
         }
 
-        public bool Stunned(string dir)
+        public bool CanDo()
         {
-            return Stun;
+            return !Air && !Stun;
         }
-
        
 
 

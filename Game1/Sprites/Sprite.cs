@@ -33,15 +33,16 @@ namespace Game1
 
         private bool _attack2 = false;
 
-        private bool idle = false;
-
-        private bool thing = true;
+        protected bool idle = false;
 
         #endregion
 
         #region Properties
+        public int Id;
 
         public Input Input;
+
+        public static Vector2 ground = Vector2.Zero;
 
         public Vector2 Position
         {
@@ -55,7 +56,7 @@ namespace Game1
             }
         }
 
-        public float Speed = 5f;
+        public float Speed = 5f;    
 
         public Vector2 Velocity;
 
@@ -133,8 +134,13 @@ namespace Game1
                     _attack2 = false;
                 }
             }
-        }
 
+            if (!_air)
+            {
+                Velocity.Y = 0;
+            }
+
+        }
 
         public virtual void DoAction()
         {
@@ -192,9 +198,9 @@ namespace Game1
                 }
                 else
                 {
-                    if (Communicator.CanDo())
+                    if (Communicator.CanDo(Id))
                     {
-                        chain = Communicator.GetAction().Split(new char[] { '&' });
+                        chain = Communicator.GetAction(Id);
                         code = int.Parse(chain[1]);
                         switch (code)
                         {
@@ -213,11 +219,9 @@ namespace Game1
                                 }
                                 break;
                             case 201: // attack1
-                                //_stun = true;
                                 _attack1 = true;
                                 break;
                             case 202: // attack2
-                                //_stun = true;
                                 _attack2 = true;
                                 break;
                             case 203: // jump
@@ -230,6 +234,8 @@ namespace Game1
                 }
             }
         }
+
+        public Sprite() { }
 
         public Sprite(Dictionary<string, Animation> animations)
         {
@@ -244,7 +250,6 @@ namespace Game1
 
         public virtual void Update(GameTime gameTime)
         {
-
             DoAction();
 
             SetAnimations();
@@ -258,11 +263,6 @@ namespace Game1
             Position += Velocity;
 
             Velocity.X = 0;
-
-            if(!_air)
-            {
-                Velocity = Vector2.Zero;
-            }
         }
 
         #endregion

@@ -11,8 +11,6 @@ namespace Game1
         static void Main()
         {
             Communicator.Setup();
-            Thread thr = new Thread(Communicator.Receive);
-            thr.Start();
             using (var game = new Game1())
                 game.Run();
         }

@@ -4,6 +4,9 @@ using System.Text;
 using System.Net.Sockets;
 using System.Threading;
 using System.Net;
+using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Graphics;
+using Microsoft.Xna.Framework.Input;
 
 namespace Game1
 {
@@ -13,9 +16,13 @@ namespace Game1
 
         private static NetworkStream stream;
 
-        private static Queue<string> messages = new Queue<string>();
+        private static Dictionary<int, Tuple<Mutex, Queue<string[]>>> coms = new Dictionary<int, Tuple<Mutex, Queue<string[]>>>();
 
-        private static Mutex mutex = new Mutex();
+        public static int ClientId = 0;
+
+        private static bool flagos = false;
+
+        private static string chunk;
 
         public static void clientShutDown()
         {
@@ -24,11 +31,16 @@ namespace Game1
         }
         public static void Setup()
         {
+            byte[] buffer = new byte[8];
             try
             {
                 client.Connect("127.0.0.1", 11111);
                 stream = client.GetStream();
-                Console.WriteLine("client connected to: " + client.Client.RemoteEndPoint.ToString());
+                string[] response = Parse(buffer).Split(new char[] { '&' }); // receiving id
+                ClientId = int.Parse(response[2]);
+                coms.Add(ClientId, new Tuple<Mutex, Queue<string[]>>(new Mutex(), new Queue<string[]>()));
+                chunk = ClientId.ToString().Length.ToString() + ClientId.ToString();
+                Console.WriteLine("client number " + response[2] + " connected to: " + client.Client.RemoteEndPoint.ToString());
             }
             catch (Exception e)
             {
@@ -36,24 +48,25 @@ namespace Game1
             }
         }
 
-        public static bool CanDo()
+        public static bool CanDo(int Id)
         {
-            return messages.Count != 0;
+            return coms[Id].Item2.Count != 0;
         }
 
-        public static string GetAction()
+        public static string[] GetAction(int Id)
         {
-            mutex.WaitOne();
-            string message = messages.Dequeue();
-            mutex.ReleaseMutex();
+            coms[Id].Item1.WaitOne();
+            string[] message = coms[Id].Item2.Dequeue();
+            coms[Id].Item1.ReleaseMutex();
             return message;
         }
         public static void Send(string msg)
         {
             try
             {
+                //Console.WriteLine("sent from client " + msg);
                 byte[] message = Encoding.ASCII.GetBytes(msg + "1" + "e");
-                stream.Write(message,0,message.Length);
+                stream.Write(message, 0, message.Length);
                 stream.Flush();
             }
             catch (Exception e)
@@ -62,67 +75,92 @@ namespace Game1
             }
         }
 
-        public static void Receive() // returns the response in a string array
+        private static string Parse(byte[] buffer)
         {
-            byte[] buffer = new byte[1024];
             string part, chain = "";
             int numByte, len;
 
+            numByte = stream.Read(buffer, 0, 1); // 0 or 1
+            part = Encoding.ASCII.GetString(buffer, 0, numByte);
+            chain += part + "&";
+            numByte = stream.Read(buffer, 0, 3); // action type
+            part = Encoding.ASCII.GetString(buffer, 0, numByte);
+
+            if (part == "600") flagos = true;
+
+            while (part != "e")
+            {
+                chain += part + "&";
+                numByte = stream.Read(buffer, 0, 1); // read len
+                len = int.Parse(Encoding.ASCII.GetString(buffer, 0, numByte));
+                numByte = stream.Read(buffer, 0, len);
+                part = Encoding.ASCII.GetString(buffer, 0, numByte);
+            }
+            //Console.WriteLine("received client: " + chain);
+            return chain;
+        }
+
+        public static void Receive() // returns the response in a string array
+        {
+            byte[] buffer = new byte[1024];
+            string[] chain;
+            int tmpId;
+
             while (true)
             {
-                numByte = stream.Read(buffer, 0, 1); // 0 or 1
-                part = Encoding.ASCII.GetString(buffer, 0, numByte);
-                chain += part + "&";
-                numByte = stream.Read(buffer, 0, 3); // action type
-                part = Encoding.ASCII.GetString(buffer, 0, numByte);
-                while (part != "e")
+                chain = Parse(buffer).Split(new char[] { '&' });
+                tmpId = int.Parse(chain[2]);
+                if (flagos)
                 {
-                    chain += part + "&";
-                    numByte = stream.Read(buffer, 0, 1); // read len
-                    len = int.Parse(Encoding.ASCII.GetString(buffer, 0, numByte));
-                    numByte = stream.Read(buffer, 0, len);
-                    part = Encoding.ASCII.GetString(buffer, 0, numByte);
+                    if (ClientId != tmpId) // create a new player
+                    {
+                        Game1.sprites.Add(new Guest(Game1.animations, tmpId)
+                        {
+                            Position = new Vector2(Sprite.ground.X, Sprite.ground.Y),
+                            Id = tmpId
+                        });
+                        coms.Add(tmpId, new Tuple<Mutex, Queue<string[]>>(new Mutex(), new Queue<string[]>()));          
+                    }
+                    flagos = false;
                 }
-
-                Console.WriteLine("received client: " + chain);
-                if (chain[0] == '1')
+                else
                 {
-                    mutex.WaitOne();
-                    messages.Enqueue(chain.Substring(0, chain.Length - 1));
-                    mutex.ReleaseMutex();
+                    coms[tmpId].Item1.WaitOne();
+                    coms[tmpId].Item2.Enqueue(chain);
+                    coms[tmpId].Item1.ReleaseMutex();
                 }
-                chain = "";
             }
         }
 
         public static void SendEndofStun()
         {
-            Send("300" + "2" + "p1");
+            Send("300" + chunk);
         }
 
         public static void SendEndofAir()
         {
-            Send("400" + "2" + "p1");
+            Send("400" + chunk);
         }
         
         public static void SendMovementRequest(string where)
         {
-            Send("100" + "2" + "p1" + "1" + where);
+            Send("100" + chunk + "1" + where);
         }
 
         public static void SendAttack1Request()
         {
-            Send("101" + "2" + "p1");
+            Send("101" + chunk);
         }
 
         public static void SendAttack2Request()
         {
-            Send("102" + "2" + "p1");
+            Send("102" + chunk);
         }
 
         public static void SendJumpRequest()
         {
-            Send("103" + "2" + "p1");
+            Send("103" + chunk);
         }
+
     }
 }

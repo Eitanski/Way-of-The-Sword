@@ -1,7 +1,7 @@
 ﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
-using System;
+using System.Threading;
 using System.Collections.Generic;
 
 namespace Game1
@@ -13,7 +13,9 @@ namespace Game1
 
         private Sprite background;
 
-        private List<Sprite> sprites; 
+        public static Dictionary<string, Animation> animations;
+
+        public static List<Sprite> sprites; 
         public Game1()
         {
             _graphics = new GraphicsDeviceManager(this);
@@ -23,9 +25,6 @@ namespace Game1
 
         protected override void Initialize()
         {
-            // TODO: Add your initialization logic here
-            
-
             base.Initialize();
         }
 
@@ -33,8 +32,8 @@ namespace Game1
         {
             _spriteBatch = new SpriteBatch(GraphicsDevice);
 
-            Dictionary<string, Animation> animations = new Dictionary<string, Animation> 
-            { { "RunLeft", new Animation(Content.Load<Texture2D>("Player/Run_Left"), 8) },
+            animations = new Dictionary<string, Animation>
+            {   { "RunLeft", new Animation(Content.Load<Texture2D>("Player/Run_Left"), 8) },
                 { "RunRight", new Animation(Content.Load<Texture2D>("Player/Run_Right"), 8) },
                 { "JumpRight", new Animation(Content.Load<Texture2D>("Player/Jump_Right"), 2) },
                 { "JumpLeft", new Animation(Content.Load<Texture2D>("Player/Jump_Left"), 2) },
@@ -47,21 +46,28 @@ namespace Game1
                 { "Attack1Left", new Animation(Content.Load<Texture2D>("Player/Attack1_Left"), 6) },
                 { "AttackLeft", new Animation(Content.Load<Texture2D>("Player/Attack_Left"), 12) }};
 
-        background = new Sprite(Content.Load<Texture2D>("pixel hills"));
-         
+            background = new Sprite(Content.Load<Texture2D>("pixel hills"));
+
+            Sprite.ground = new Vector2(100, GraphicsDevice.Viewport.Height - 270);
+
             sprites = new List<Sprite>()
             {
-                new Sprite(animations) { 
-                Position = new Vector2(100, GraphicsDevice.Viewport.Height - 270), 
-                Input = new Input() { 
-                Up = Keys.Up, 
-                Down = Keys.Down, 
-                Left = Keys.Left, 
-                Right = Keys.Right, 
-                Jump = Keys.Space, 
+                new Sprite(animations) {
+                Position = new Vector2(Sprite.ground.X, Sprite.ground.Y),
+                Id = Communicator.ClientId,
+                Input = new Input() {
+                Up = Keys.Up,
+                Down = Keys.Down,
+                Left = Keys.Left,
+                Right = Keys.Right,
+                Jump = Keys.Space,
                 Attack1 = Keys.A,
-                Attack2 = Keys.S} } };
-            
+                Attack2 = Keys.S} }
+            };
+
+            Thread thr = new Thread(Communicator.Receive);
+            thr.Start();
+
         }
 
         protected override void Update(GameTime gameTime)
@@ -81,8 +87,6 @@ namespace Game1
         protected override void Draw(GameTime gameTime)
         {
             GraphicsDevice.Clear(Color.Transparent);
-
-            // TODO: Add your drawing code here
 
             _spriteBatch.Begin();
 
