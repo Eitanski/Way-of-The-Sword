@@ -25,7 +25,7 @@ namespace Game1
             
         private float _relativePos;
 
-        private bool _direction = true; // right - true, left - false
+        protected bool _direction = true; // right - true, left - false
 
         private bool _stun = false;
 
@@ -201,11 +201,11 @@ namespace Game1
                     if (Communicator.CanDo(Id))
                     {
                         chain = Communicator.GetAction(Id);
-                        code = int.Parse(chain[1]);
+                        code = int.Parse(chain[0]);
                         switch (code)
                         {
                             case 200: // move
-                                if (chain[3] == "r")
+                                if (chain[2] == "r")
                                 {
                                     _animationManager.Play(_animations["RunRight"]);
                                     Velocity.X = Speed;

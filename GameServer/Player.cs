@@ -13,8 +13,6 @@ namespace GameServer
 
         private float _relativePos;
 
-        private bool _direction = true; // right - true, left - false
-
         private bool _attack1 = false;
 
         private bool _attack2 = false;
@@ -22,6 +20,8 @@ namespace GameServer
         public float Speed = 5f;
 
         public Vector2 Velocity = Vector2.Zero;
+
+        public Vector2 Position = new Vector2(100, 0);
 
         public Vector2 Acceleration = new Vector2(0f, 2f);
 
@@ -35,6 +35,8 @@ namespace GameServer
 
         public string chunk;
 
+        public bool Direction = true; // right - true, left - false
+
         public Player()
         {
             chunk = id.ToString().Length.ToString() + id.ToString();
@@ -44,13 +46,15 @@ namespace GameServer
             if (dir == "r")
             {
                 Velocity.X = Speed;
-                _direction = true;
+                Direction = true;
             }
             else
             {
                 Velocity.X = -Speed;
-                _direction = false;
+                Direction = false;
             }
+
+            Position += Velocity;
         }
 
         public bool CanDo()
@@ -58,7 +62,5 @@ namespace GameServer
             return !Air && !Stun;
         }
        
-
-
     }
 }

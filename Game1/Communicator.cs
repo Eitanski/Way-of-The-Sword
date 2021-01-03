@@ -37,10 +37,11 @@ namespace Game1
                 client.Connect("127.0.0.1", 11111);
                 stream = client.GetStream();
                 string[] response = Parse(buffer).Split(new char[] { '&' }); // receiving id
-                ClientId = int.Parse(response[2]);
+                flagos = false; 
+                ClientId = int.Parse(response[1]);
                 coms.Add(ClientId, new Tuple<Mutex, Queue<string[]>>(new Mutex(), new Queue<string[]>()));
-                chunk = ClientId.ToString().Length.ToString() + ClientId.ToString();
-                Console.WriteLine("client number " + response[2] + " connected to: " + client.Client.RemoteEndPoint.ToString());
+                chunk = ClientId.ToString().Length + ClientId.ToString();
+                Console.WriteLine("client number " + response[1] + " connected to: " + client.Client.RemoteEndPoint.ToString());
             }
             catch (Exception e)
             {
@@ -80,9 +81,6 @@ namespace Game1
             string part, chain = "";
             int numByte, len;
 
-            numByte = stream.Read(buffer, 0, 1); // 0 or 1
-            part = Encoding.ASCII.GetString(buffer, 0, numByte);
-            chain += part + "&";
             numByte = stream.Read(buffer, 0, 3); // action type
             part = Encoding.ASCII.GetString(buffer, 0, numByte);
 
@@ -109,16 +107,16 @@ namespace Game1
             while (true)
             {
                 chain = Parse(buffer).Split(new char[] { '&' });
-                tmpId = int.Parse(chain[2]);
+                tmpId = int.Parse(chain[1]);
                 if (flagos)
                 {
-                    if (ClientId != tmpId) // create a new player
+                    if (!coms.ContainsKey(tmpId)) // create a new player
                     {
-                        Game1.sprites.Add(new Guest(Game1.animations, tmpId)
+                        Game1.sprites.Add(new Guest(Game1.animations, tmpId, chain[3] == "1")
                         {
-                            Position = new Vector2(Sprite.ground.X, Sprite.ground.Y),
+                            Position = new Vector2(float.Parse(chain[2]), Sprite.ground.Y),
                             Id = tmpId
-                        });
+                        }) ; 
                         coms.Add(tmpId, new Tuple<Mutex, Queue<string[]>>(new Mutex(), new Queue<string[]>()));          
                     }
                     flagos = false;

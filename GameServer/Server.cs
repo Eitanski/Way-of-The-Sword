@@ -38,7 +38,7 @@ namespace GameServer
         {
             foreach (Player client in players.Values)
             {
-                Disperse("600", client);
+                Disperse("600", client, client.Position.X.ToString().Length + client.Position.X.ToString() + "1" + (client.Direction ? 1 : 0));
             }
         }
 
@@ -72,7 +72,7 @@ namespace GameServer
         {
             foreach(KeyValuePair<TcpClient,Player> val in players)
             {
-                Send("1" + code + player.chunk + data , val.Key.GetStream());
+                Send(code + player.chunk + data , val.Key.GetStream());
             }
         }
 
@@ -130,7 +130,7 @@ namespace GameServer
 
         public void SendId(Player player, NetworkStream stream)
         {
-            Send("1" + "600" + player.chunk, stream);
+            Send("600" + player.chunk, stream);
         }
 
         public void ManageRequest(string req, TcpClient clientSocket)

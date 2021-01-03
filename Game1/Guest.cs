@@ -11,8 +11,9 @@ namespace Game1
 {
     class Guest : Sprite
     {      
-        public Guest(Dictionary<string, Animation> animations, int guestId) : base(animations)
+        public Guest(Dictionary<string, Animation> animations, int guestId, bool dir) : base(animations)
         {
+            _direction = dir;
         }
 
         public override void Update(GameTime gameTime)
