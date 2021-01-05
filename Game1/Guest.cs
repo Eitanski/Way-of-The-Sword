@@ -18,7 +18,7 @@ namespace Game1
 
         public override void Update(GameTime gameTime)
         {
-            if (!Communicator.CanDo(Id)) idle = true;
+            if (!Communicator.CanDo(Id)) _idle = true;
 
             SetAnimations();
 

@@ -33,8 +33,9 @@ namespace Game1
 
         private bool _attack2 = false;
 
-        protected bool idle = false;
+        protected bool _idle = false;
 
+        public int count = 0;
         #endregion
 
         #region Properties
@@ -127,7 +128,7 @@ namespace Game1
                 {
                     _animationManager.Stop();
                     Communicator.SendEndofStun();
-                    idle = true;
+                    _idle = true;
 
                     _stun = false;
                     _attack1 = false;
@@ -166,7 +167,7 @@ namespace Game1
             }
             else
             {
-                idle = true;
+                if(!_air) _idle = true;
             }
         }
 
@@ -188,13 +189,13 @@ namespace Game1
 
             if (!_stun)
             {
-                if (idle)
+                if (_idle)
                 {
                     if (_direction)
                         _animationManager.Play(_animations["IdleRight"]);
                     else
                         _animationManager.Play(_animations["IdleLeft"]);   
-                    idle = !idle;
+                    _idle = !_idle;
                 }
                 else
                 {
@@ -225,6 +226,7 @@ namespace Game1
                                 _attack2 = true;
                                 break;
                             case 203: // jump
+                                _idle = false;
                                 _air = true;
                                 _relativePos = Position.Y;
                                 Velocity.Y = -Speed - 20f;

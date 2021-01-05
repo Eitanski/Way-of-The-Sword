@@ -79,8 +79,12 @@ namespace Game1
             }
 
             foreach (Sprite sprite in sprites)
+            {
                 sprite.Update(gameTime);
-
+                System.Console.WriteLine(gameTime.ElapsedGameTime.TotalSeconds);
+                System.Console.ReadLine();
+            }
+                
             base.Update(gameTime);
         }
 
