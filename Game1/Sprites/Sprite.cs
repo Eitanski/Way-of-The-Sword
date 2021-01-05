@@ -193,7 +193,7 @@ namespace Game1
                     if (_direction)
                         _animationManager.Play(_animations["IdleRight"]);
                     else
-                        _animationManager.Play(_animations["IdleLeft"]);
+                        _animationManager.Play(_animations["IdleLeft"]);   
                     idle = !idle;
                 }
                 else

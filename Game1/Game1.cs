@@ -33,20 +33,20 @@ namespace Game1
             _spriteBatch = new SpriteBatch(GraphicsDevice);
 
             animations = new Dictionary<string, Animation>
-            {   { "RunLeft", new Animation(Content.Load<Texture2D>("Player/Run_Left"), 8) },
-                { "RunRight", new Animation(Content.Load<Texture2D>("Player/Run_Right"), 8) },
-                { "JumpRight", new Animation(Content.Load<Texture2D>("Player/Jump_Right"), 2) },
-                { "JumpLeft", new Animation(Content.Load<Texture2D>("Player/Jump_Left"), 2) },
-                { "FallRight", new Animation(Content.Load<Texture2D>("Player/Fall_Right"), 2) },
-                { "FallLeft", new Animation(Content.Load<Texture2D>("Player/Fall_Left"), 2) },
-                { "IdleRight", new Animation(Content.Load<Texture2D>("Player/Idle_Right"), 8) },
-                { "IdleLeft", new Animation(Content.Load<Texture2D>("Player/Idle_Left"), 8) },
-                { "Attack1Right", new Animation(Content.Load<Texture2D>("Player/Attack1_Right"), 6) },
-                { "AttackRight", new Animation(Content.Load<Texture2D>("Player/Attack_Right"), 12) },
-                { "Attack1Left", new Animation(Content.Load<Texture2D>("Player/Attack1_Left"), 6) },
-                { "AttackLeft", new Animation(Content.Load<Texture2D>("Player/Attack_Left"), 12) }};
+            {   { "RunLeft", new Animation(Content.Load<Texture2D>("test/Run_Left"), 8) },
+                { "RunRight", new Animation(Content.Load<Texture2D>("test/Run_Right"), 8) },
+                { "JumpRight", new Animation(Content.Load<Texture2D>("test/Jump_Right"), 2) },
+                { "JumpLeft", new Animation(Content.Load<Texture2D>("test/Jump_Left"), 2) },
+                { "FallRight", new Animation(Content.Load<Texture2D>("test/Fall_Right"), 2) },
+                { "FallLeft", new Animation(Content.Load<Texture2D>("test/Fall_Left"), 2) },
+                { "IdleRight", new Animation(Content.Load<Texture2D>("test/Idle_Right"), 8) },
+                { "IdleLeft", new Animation(Content.Load<Texture2D>("test/Idle_Left"), 8) },
+                { "Attack1Right", new Animation(Content.Load<Texture2D>("test/Attack1_Right"), 6) },
+                { "AttackRight", new Animation(Content.Load<Texture2D>("test/Attack_Right"), 12) },
+                { "Attack1Left", new Animation(Content.Load<Texture2D>("test/Attack1_Left"), 6) },
+                { "AttackLeft", new Animation(Content.Load<Texture2D>("test/Attack_Left"), 12) }};
 
-            background = new Sprite(Content.Load<Texture2D>("pixel hills"));
+            background = new Sprite(Content.Load<Texture2D>("maps/pixel hills"));
 
             Sprite.ground = new Vector2(100, GraphicsDevice.Viewport.Height - 270);
 
