@@ -186,7 +186,7 @@ namespace Game1
                     Communicator.SendEndofAir();
                 }
             }
-
+                               
             if (!_stun)
             {
                 if (_idle)
