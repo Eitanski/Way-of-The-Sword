@@ -11,9 +11,10 @@ namespace Game1
 {
     class Guest : Sprite
     {      
-        public Guest(Dictionary<string, Animation> animations, int guestId, bool dir) : base(animations)
+        public Guest(Dictionary<string, Animation> animations, int guestId, bool dir, Character character) : base(animations)
         {
             _direction = dir;
+            Champion = character;
         }
 
         public override void Update(GameTime gameTime)
@@ -24,7 +25,7 @@ namespace Game1
 
             BandAid();
 
-            _animationManager.Update(gameTime);
+            _animationManager.Update(gameTime,Id);
 
             BandAid2();
 

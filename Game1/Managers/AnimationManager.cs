@@ -51,7 +51,7 @@ namespace Game1
             _animation.CurrentFrame = 0;
         }
 
-        public void Update(GameTime gameTime)
+        public void Update(GameTime gameTime,int id)
         {
             _ended = false;
             _timer += (float)gameTime.ElapsedGameTime.TotalSeconds;
@@ -68,6 +68,7 @@ namespace Game1
                     _ended = true;
                 }
             }
+            _animation.FrameSpeed = 0.08f;
         }
     }
 }

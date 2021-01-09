@@ -22,7 +22,18 @@ namespace Game1
 
         public Texture2D Texture { get; private set; }
 
-        public Animation(Texture2D texture, int frameCount)
+        public Animation(Animation other)
+        {
+            Texture = other.Texture;
+
+            FrameCount = other.FrameCount;
+
+            IsLooping = other.IsLooping;
+
+            FrameSpeed = other.FrameSpeed;
+        }
+
+        public Animation(Texture2D texture, int frameCount, float frameSpeed = 0.08f)
         {
             Texture = texture;
 
@@ -30,7 +41,7 @@ namespace Game1
 
             IsLooping = true;
 
-            FrameSpeed = 0.08f;
+            FrameSpeed = frameSpeed;
         }
     }
 }

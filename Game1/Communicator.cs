@@ -29,6 +29,16 @@ namespace Game1
             client.Dispose(); 
             client.Close();
         }
+
+        static public Dictionary<string, Animation> CloneAnimations(Dictionary<string, Animation> input)
+        {
+            Dictionary<string, Animation> result = new Dictionary<string, Animation>();
+            foreach (KeyValuePair<string, Animation> node in input)
+            {
+                result.Add(node.Key, new Animation(node.Value));
+            }
+            return result;
+        }
         public static void Setup()
         {
             byte[] buffer = new byte[8];
@@ -112,7 +122,7 @@ namespace Game1
                 {
                     if (!coms.ContainsKey(tmpId)) // create a new player
                     {
-                        Game1.sprites.Add(new Guest(Game1.animations, tmpId, chain[3] == "1")
+                        Game1.sprites.Add(new Guest(CloneAnimations(Game1.animations[Game1.champions.Feng]), tmpId, chain[3] == "1",new Feng())
                         {
                             Position = new Vector2(float.Parse(chain[2]), Sprite.ground.Y),
                             Id = tmpId

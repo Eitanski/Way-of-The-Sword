@@ -21,11 +21,11 @@ namespace Game1
 
         protected Texture2D _texture;
 
-        private bool _air = false;
+        private bool _air = false; 
             
         private float _relativePos;
 
-        protected bool _direction = true; // right - true, left - false
+        public bool _direction = true; // right - true, left - false
 
         private bool _stun = false;
 
@@ -33,17 +33,15 @@ namespace Game1
 
         private bool _attack2 = false;
 
-        protected bool _idle = false;
-
-        public int count = 0;
+        public bool _idle = false;
         #endregion
 
         #region Properties
         public int Id;
 
-        public Input Input;
-
         public static Vector2 ground = Vector2.Zero;
+
+        public Character Champion;
 
         public Vector2 Position
         {
@@ -56,9 +54,7 @@ namespace Game1
                     _animationManager.Position = _position;
             }
         }
-
-        public float Speed = 5f;    
-
+ 
         public Vector2 Velocity;
 
         public Vector2 Acceleration = new Vector2(0f, 2f);
@@ -145,23 +141,23 @@ namespace Game1
 
         public virtual void DoAction()
         {
-            if (Keyboard.GetState().IsKeyDown(Input.Jump) && !_air)
+            if (Keyboard.GetState().IsKeyDown(Champion.Input.Jump) && !_air)
             {
                 Communicator.SendJumpRequest();
             }
-            else if (Keyboard.GetState().IsKeyDown(Input.Attack1) && !_attack1)
+            else if (Keyboard.GetState().IsKeyDown(Champion.Input.Attack1) && !_attack1)
             {
                 Communicator.SendAttack1Request();
             }
-            else if (Keyboard.GetState().IsKeyDown(Input.Attack2) && !_attack2)
+            else if (Keyboard.GetState().IsKeyDown(Champion.Input.Attack2) && !_attack2)
             {   
                 Communicator.SendAttack2Request();
             }
-            else if (Keyboard.GetState().IsKeyDown(Input.Left))
+            else if (Keyboard.GetState().IsKeyDown(Champion.Input.Left))
             {
                 Communicator.SendMovementRequest("l");
             }
-            else if (Keyboard.GetState().IsKeyDown(Input.Right))
+            else if (Keyboard.GetState().IsKeyDown(Champion.Input.Right))
             {
                 Communicator.SendMovementRequest("r");
             }
@@ -174,7 +170,7 @@ namespace Game1
         protected virtual void SetAnimations()
         {
             string[] chain;
-            int code;
+            int code;   
             
             if (_air)
             {
@@ -209,13 +205,13 @@ namespace Game1
                                 if (chain[2] == "r")
                                 {
                                     _animationManager.Play(_animations["RunRight"]);
-                                    Velocity.X = Speed;
+                                    Velocity.X = Champion.Speed;
                                     _direction = true;
                                 }
                                 else
                                 {
                                     _animationManager.Play(_animations["RunLeft"]);
-                                    Velocity.X = -Speed;
+                                    Velocity.X = -Champion.Speed;
                                     _direction = false;
                                 }
                                 break;
@@ -229,7 +225,7 @@ namespace Game1
                                 _idle = false;
                                 _air = true;
                                 _relativePos = Position.Y;
-                                Velocity.Y = -Speed - 20f;
+                                Velocity.Y = -Champion.Speed - 20f;
                                 break;
                         }
                     }
@@ -258,7 +254,7 @@ namespace Game1
 
             BandAid();
 
-            _animationManager.Update(gameTime);
+            _animationManager.Update(gameTime,Id);
 
             BandAid2();
         
