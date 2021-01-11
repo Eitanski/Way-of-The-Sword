@@ -37,19 +37,37 @@ namespace Game1
             {
                 { champions.Feng, new Dictionary<string, Animation>()
 
-                {{"RunLeft", new Animation(Content.Load<Texture2D>("test/Run_Left"), 8) } ,
-                 { "RunRight", new Animation(Content.Load<Texture2D>("test/Run_Right"), 8) },
-                 { "JumpRight", new Animation(Content.Load<Texture2D>("test/Jump_Right"), 2) },
-                 { "JumpLeft", new Animation(Content.Load<Texture2D>("test/Jump_Left"), 2) },
-                 { "FallRight", new Animation(Content.Load<Texture2D>("test/Fall_Right"), 2) },
-                 { "FallLeft", new Animation(Content.Load<Texture2D>("test/Fall_Left"), 2) },
-                 { "IdleRight", new Animation(Content.Load<Texture2D>("test/Idle_Right"), 8) },
-                 { "IdleLeft", new Animation(Content.Load<Texture2D>("test/Idle_Left"), 8) },
-                 { "Attack1Right", new Animation(Content.Load<Texture2D>("test/Attack1_Right"), 6) },
-                 { "AttackRight", new Animation(Content.Load<Texture2D>("test/Attack_Right"), 12) },
-                 { "Attack1Left", new Animation(Content.Load<Texture2D>("test/Attack1_Left"), 6) },
-                 { "AttackLeft", new Animation(Content.Load<Texture2D>("test/Attack_Left"), 12) }} }
+                {{"RunLeft", new Animation(Content.Load<Texture2D>("test/Run_Left"), 8){ Hitboxes = new List<Hitbox>()
+                        { new Hitbox(new Vector2(150,150), 100, 20, GraphicsDevice) } } } ,
+                 { "RunRight", new Animation(Content.Load<Texture2D>("test/Run_Right"), 8){ Hitboxes = new List<Hitbox>()
+                        { new Hitbox(new Vector2(0,0), 100, 100, GraphicsDevice) } } },
+                 { "JumpRight", new Animation(Content.Load<Texture2D>("test/Jump_Right"), 2){ Hitboxes = new List<Hitbox>()
+                        { new Hitbox(new Vector2(0,0), 100, 100, GraphicsDevice) } } },
+                 { "JumpLeft", new Animation(Content.Load<Texture2D>("test/Jump_Left"), 2){ Hitboxes = new List<Hitbox>()
+                        { new Hitbox(new Vector2(0,0), 100, 100, GraphicsDevice) } } },
+                 { "FallRight", new Animation(Content.Load<Texture2D>("test/Fall_Right"), 2){ Hitboxes = new List<Hitbox>()
+                        { new Hitbox(new Vector2(0,0), 100, 100, GraphicsDevice) } } },
+                 { "FallLeft", new Animation(Content.Load<Texture2D>("test/Fall_Left"), 2){ Hitboxes = new List<Hitbox>()
+                        { new Hitbox(new Vector2(150,150), 100, 100, GraphicsDevice) } } },
+                 { "IdleRight", new Animation(Content.Load<Texture2D>("test/Idle_Right"), 8){ Hitboxes = new List<Hitbox>()
+                        { new Hitbox(new Vector2(192,154), 22, 22, GraphicsDevice), 
+                          new Hitbox(new Vector2(182, 175), 35, 35, GraphicsDevice) ,
+                          new Hitbox(new Vector2(180,210), 40, 40, GraphicsDevice) } } },
+                 { "IdleLeft", new Animation(Content.Load<Texture2D>("test/Idle_Left"), 8){ Hitboxes = new List<Hitbox>()
+                        { new Hitbox(new Vector2(185,154), 22, 22, GraphicsDevice),
+                          new Hitbox(new Vector2(182, 175), 35, 35, GraphicsDevice) ,
+                          new Hitbox(new Vector2(178,210), 40, 40, GraphicsDevice) } } },
+                 { "Attack1Right", new Animation(Content.Load<Texture2D>("test/Attack1_Right"), 6){ Hitboxes = new List<Hitbox>()
+                        { new Hitbox(new Vector2(0,0), 100, 100, GraphicsDevice) } } },
+                 { "AttackRight", new Animation(Content.Load<Texture2D>("test/Attack_Right"), 12){ Hitboxes = new List<Hitbox>()
+                        { new Hitbox(new Vector2(0,0), 100, 100, GraphicsDevice) } } },
+                 { "Attack1Left", new Animation(Content.Load<Texture2D>("test/Attack1_Left"), 6){ Hitboxes = new List<Hitbox>()
+                        { new Hitbox(new Vector2(0,0), 100, 100, GraphicsDevice) } } },
+                 { "AttackLeft", new Animation(Content.Load<Texture2D>("test/Attack_Left"), 12){ Hitboxes = new List<Hitbox>()
+                        { new Hitbox(new Vector2(0,0), 100, 100, GraphicsDevice) } } }} }
             };
+
+            AnimationManager.HitboxLayout = true;
 
             background = new Sprite(Content.Load<Texture2D>("maps/pixel hills"));
 

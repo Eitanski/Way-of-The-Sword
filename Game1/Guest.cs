@@ -23,11 +23,11 @@ namespace Game1
 
             SetAnimations();
 
-            BandAid();
+            setComplexAnimations();
 
-            _animationManager.Update(gameTime,Id);
+            _animationManager.Update(gameTime);
 
-            BandAid2();
+            Retrieve();
 
             Position += Velocity;
 

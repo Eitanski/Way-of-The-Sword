@@ -74,7 +74,7 @@ namespace Game1
             else throw new Exception("This ain't right..!");
         }
         
-        public void BandAid()
+        public void setComplexAnimations()
         {
             if (Velocity.Y > 0)
             {
@@ -116,7 +116,7 @@ namespace Game1
             }
         }
 
-        public void BandAid2()
+        public void Retrieve()
         {
             if (_stun)
             {
@@ -252,11 +252,11 @@ namespace Game1
 
             SetAnimations();
 
-            BandAid();
+            setComplexAnimations();
 
-            _animationManager.Update(gameTime,Id);
+            _animationManager.Update(gameTime);
 
-            BandAid2();
+            Retrieve();
         
             Position += Velocity;
 

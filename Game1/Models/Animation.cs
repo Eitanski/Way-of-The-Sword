@@ -22,6 +22,8 @@ namespace Game1
 
         public Texture2D Texture { get; private set; }
 
+        public List<Hitbox> Hitboxes { get; set; }
+
         public Animation(Animation other)
         {
             Texture = other.Texture;
@@ -31,6 +33,11 @@ namespace Game1
             IsLooping = other.IsLooping;
 
             FrameSpeed = other.FrameSpeed;
+
+            Hitboxes = new List<Hitbox>();
+
+            foreach (Hitbox box in other.Hitboxes)
+                Hitboxes.Add(new Hitbox(box));
         }
 
         public Animation(Texture2D texture, int frameCount, float frameSpeed = 0.08f)

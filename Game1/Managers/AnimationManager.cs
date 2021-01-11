@@ -14,6 +14,8 @@ namespace Game1
 
         public bool _ended = false;
 
+        public static bool HitboxLayout { get; set; } = false;
+
         public Vector2 Position { get; set; }
 
         public AnimationManager(Animation animation)
@@ -30,6 +32,10 @@ namespace Game1
                                            _animation.FrameWidth,
                                            _animation.FrameHeight),
                              Color.White);
+
+            if (HitboxLayout)
+                foreach (Hitbox hitbox in _animation.Hitboxes)
+                    spriteBatch.Draw(hitbox.Texture, hitbox.rect, Color.White);     
         }
 
         public void Play(Animation animation)
@@ -51,7 +57,7 @@ namespace Game1
             _animation.CurrentFrame = 0;
         }
 
-        public void Update(GameTime gameTime,int id)
+        public void Update(GameTime gameTime)
         {
             _ended = false;
             _timer += (float)gameTime.ElapsedGameTime.TotalSeconds;
@@ -68,7 +74,12 @@ namespace Game1
                     _ended = true;
                 }
             }
-            _animation.FrameSpeed = 0.08f;
+
+            if (HitboxLayout)
+                foreach (Hitbox hitbox in _animation.Hitboxes)
+                    hitbox.rect = new Rectangle((Position + hitbox.Offset).ToPoint(), new Point(hitbox.Width, hitbox.Height));                
+                        
+                    
         }
     }
 }
