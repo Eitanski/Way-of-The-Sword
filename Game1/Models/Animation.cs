@@ -18,11 +18,16 @@ namespace Game1
 
         public int FrameWidth { get { return Texture.Width / FrameCount; } }
 
+        public int ActualWidth { get { return FrameWidth * Fix; }}
+        public int ActualHeight { get { return FrameHeight * Fix; } }
+
         public bool IsLooping { get; set; }
 
         public Texture2D Texture { get; private set; }
 
-        public List<Hitbox> Hitboxes { get; set; }
+        public List<List<Hitbox>> Hitboxes { get; set; }
+
+        public static int Fix { get; set; } = 2;
 
         public Animation(Animation other)
         {

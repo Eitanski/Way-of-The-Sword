@@ -34,7 +34,7 @@ namespace Game1
                              Color.White);
 
             if (HitboxLayout)
-                foreach (Hitbox hitbox in _animation.Hitboxes)
+                foreach (Hitbox hitbox in _animation.Hitboxes[_animation.CurrentFrame])
                     spriteBatch.Draw(hitbox.Texture, hitbox.rect, Color.White);     
         }
 
