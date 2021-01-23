@@ -4,6 +4,7 @@ using Microsoft.Xna.Framework.Input;
 using System.Threading;
 using System.Collections.Generic;
 using System;
+using Newtonsoft.Json.Linq;
 
 namespace Game1
 {
@@ -11,11 +12,11 @@ namespace Game1
     {
         private GraphicsDeviceManager _graphics;
         private SpriteBatch _spriteBatch;
-        public enum champions {Feng, Njal };
+        public enum champions {Feng, Ronin };
 
         private Sprite background;
 
-        public static Dictionary<champions,Dictionary<string, Animation>> animations;
+        public static Dictionary<champions, Dictionary<string, Animation>> animations;
 
         public static List<Sprite> sprites; 
         public Game1()
@@ -38,18 +39,18 @@ namespace Game1
             {
                 { champions.Feng, new Dictionary<string, Animation>()
 
-                {{"RunLeft", new Animation(Content.Load<Texture2D>("ronin/ronin_walk"), 20) },
-                 { "RunRight", new Animation(Content.Load<Texture2D>("ronin/ronin_walk"), 20) },
-                 { "JumpRight", new Animation(Content.Load<Texture2D>("test/Jump_Right"), 2) },
-                 { "JumpLeft", new Animation(Content.Load<Texture2D>("test/Jump_Left"), 2) },
-                 { "FallRight", new Animation(Content.Load<Texture2D>("test/Fall_Right"), 2) },
-                 { "FallLeft", new Animation(Content.Load<Texture2D>("test/Fall_Left"), 2) },
-                 { "IdleRight", new Animation(Content.Load<Texture2D>("test/Idle_Right"), 8) },
-                 { "IdleLeft", new Animation(Content.Load<Texture2D>("test/Idle_Left"), 8) },
-                 { "Attack1Right", new Animation(Content.Load<Texture2D>("test/Attack1_Right"), 6) },
-                 { "AttackRight", new Animation(Content.Load<Texture2D>("test/Attack_Right"), 12) },
-                 { "Attack1Left", new Animation(Content.Load<Texture2D>("test/Attack1_Left"), 6) },
-                 { "AttackLeft", new Animation(Content.Load<Texture2D>("test/Attack_Left"), 12) }} }
+                {{"RunLeft", new Animation(Content.Load<Texture2D>("Feng/Run_Left"), 8) },
+                 { "RunRight", new Animation(Content.Load<Texture2D>("Feng/Run_Right"), 8) },
+                 { "JumpRight", new Animation(Content.Load<Texture2D>("Feng/Jump_Right"), 2) },
+                 { "JumpLeft", new Animation(Content.Load<Texture2D>("Feng/Jump_Left"), 2) },
+                 { "FallRight", new Animation(Content.Load<Texture2D>("Feng/Fall_Right"), 2) },
+                 { "FallLeft", new Animation(Content.Load<Texture2D>("Feng/Fall_Left"), 2) },
+                 { "IdleRight", new Animation(Content.Load<Texture2D>("Feng/Idle_Right"), 8) },
+                 { "IdleLeft", new Animation(Content.Load<Texture2D>("Feng/Idle_Left"), 8) },
+                 { "Attack1Right", new Animation(Content.Load<Texture2D>("Feng/Attack1_Right"), 6) },
+                 { "AttackRight", new Animation(Content.Load<Texture2D>("Feng/Attack_Right"), 12) },
+                 { "Attack1Left", new Animation(Content.Load<Texture2D>("Feng/Attack1_Left"), 6) },
+                 { "AttackLeft", new Animation(Content.Load<Texture2D>("Feng/Attack_Left"), 12) }} }
             };
 
             //animations[champions.Feng]["IdleRight"].Hitboxes;
