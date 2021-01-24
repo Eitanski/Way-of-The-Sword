@@ -36,35 +36,15 @@ namespace Game1
             Texture.SetData(pixelData.ToArray());
         }
 
-        public Hitbox(Vector2 offset, int width, int height, GraphicsDevice graphicsDevice)
+        public Hitbox(bool mode,float x, float y, float w, float h, int frameHeight, int frameWidth, GraphicsDevice graphicsDevice)
         {
-            Height = height;
-            Width = width;
+            Width = (int)(w * frameWidth);
+            Height = (int)(h * frameHeight);
             SetHitbox(graphicsDevice);
-            Offset = offset;
+            Offset = new Vector2(x * frameWidth, y * frameHeight);
+            Mode = mode;
         }
 
-        public Hitbox(int w, int h,string format, GraphicsDevice dev)
-        {
-            SetHitbox(dev);
-            
-            string[] parts = format.Split("|");
-            float[] items = new float[4];
-            string tmp;
-            int idx = 0;
-
-            for (int i = 0; i < 4; i++) 
-            {
-                tmp = parts[i].Substring(idx, parts[i].IndexOf('0', idx));
-                idx += tmp.Length;
-                if (tmp[tmp.Length] == ' ') tmp = tmp.Substring(0, tmp.Length - 1);
-                items[i] = float.Parse(tmp);
-            }
-
-            Offset = new Vector2(w * items[0], h * items[1]);
-            Width = (int)(w * items[2]);
-            Height = (int)(h * items[3]);
-        }
 
         public Hitbox(Hitbox other)
         {
@@ -72,6 +52,7 @@ namespace Game1
             Width = other.Width;
             Texture = other.Texture;
             Offset = other.Offset;
+            Mode = other.Mode;
         }
 
     }

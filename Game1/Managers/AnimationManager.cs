@@ -76,7 +76,7 @@ namespace Game1
             }
 
             if (HitboxLayout)
-                foreach (Hitbox hitbox in _animation.Hitboxes)
+                foreach (Hitbox hitbox in _animation.Hitboxes[_animation.CurrentFrame])
                     hitbox.rect = new Rectangle((Position + hitbox.Offset).ToPoint(), new Point(hitbox.Width, hitbox.Height));                
                         
                     

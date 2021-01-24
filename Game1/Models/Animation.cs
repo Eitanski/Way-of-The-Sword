@@ -39,10 +39,17 @@ namespace Game1
 
             FrameSpeed = other.FrameSpeed;
 
-            Hitboxes = new List<Hitbox>();
+            Hitboxes = new List<List<Hitbox>>();
 
-            foreach (Hitbox box in other.Hitboxes)
-                Hitboxes.Add(new Hitbox(box));
+            List<Hitbox> tmpList;
+
+            foreach (List<Hitbox> boxes in other.Hitboxes)
+            {
+                tmpList = new List<Hitbox>();
+                foreach (Hitbox box in boxes)
+                    tmpList.Add(new Hitbox(box));
+                Hitboxes.Add(tmpList);    
+            }
         }
 
         public Animation(Texture2D texture, int frameCount, float frameSpeed = 0.08f)

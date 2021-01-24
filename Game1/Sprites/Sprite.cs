@@ -79,27 +79,27 @@ namespace Game1
             if (Velocity.Y > 0)
             {
                 if (!_direction)
-                    _animationManager.Play(_animations["FallLeft"]);
+                    _animationManager.Play(_animations["Fall_Left"]);
                 else
-                    _animationManager.Play(_animations["FallRight"]);
+                    _animationManager.Play(_animations["Fall_Right"]);
             }
             else if (Velocity.Y < 0)
             {
                 if (!_direction)
-                    _animationManager.Play(_animations["JumpLeft"]);
+                    _animationManager.Play(_animations["Jump_Left"]);
                 else
-                    _animationManager.Play(_animations["JumpRight"]);
+                    _animationManager.Play(_animations["Jump_Right"]);
             }
             else if (_attack1 && !_stun)
             {
                 _stun = true;
                 if (!_direction)
                 {
-                    _animationManager.Play(_animations["Attack1Left"]);
+                    _animationManager.Play(_animations["Attack1_Left"]);
                 }
                 else
                 {
-                    _animationManager.Play(_animations["Attack1Right"]);
+                    _animationManager.Play(_animations["Attack1_Right"]);
                 }
             }
             else if (_attack2 && !_stun)
@@ -107,11 +107,11 @@ namespace Game1
                 _stun = true;
                 if (!_direction)
                 {
-                    _animationManager.Play(_animations["AttackLeft"]);
+                    _animationManager.Play(_animations["Attack_Left"]);
                 }
                 else
                 {
-                    _animationManager.Play(_animations["AttackRight"]);
+                    _animationManager.Play(_animations["Attack_Right"]);
                 }
             }
         }
@@ -188,9 +188,9 @@ namespace Game1
                 if (_idle)
                 {
                     if (_direction)
-                        _animationManager.Play(_animations["IdleRight"]);
+                        _animationManager.Play(_animations["Idle_Right"]);
                     else
-                        _animationManager.Play(_animations["IdleLeft"]);   
+                        _animationManager.Play(_animations["Idle_Left"]);   
                     _idle = !_idle;
                 }
                 else
@@ -204,13 +204,13 @@ namespace Game1
                             case 200: // move
                                 if (chain[2] == "r")
                                 {
-                                    _animationManager.Play(_animations["RunRight"]);
+                                    _animationManager.Play(_animations["Run_Right"]);
                                     Velocity.X = Champion.Speed;
                                     _direction = true;
                                 }
                                 else
                                 {
-                                    _animationManager.Play(_animations["RunLeft"]);
+                                    _animationManager.Play(_animations["Run_Left"]);
                                     Velocity.X = -Champion.Speed;
                                     _direction = false;
                                 }
