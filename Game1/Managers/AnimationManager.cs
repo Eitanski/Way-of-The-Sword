@@ -35,7 +35,7 @@ namespace Game1
 
             if (HitboxLayout)
                 foreach (Hitbox hitbox in _animation.Hitboxes[_animation.CurrentFrame])
-                    spriteBatch.Draw(hitbox.Texture, hitbox.rect, Color.White);     
+                    spriteBatch.Draw(hitbox.Texture, hitbox.rect, Color.White);
         }
 
         public void Play(Animation animation)
@@ -66,6 +66,8 @@ namespace Game1
             {
                 _timer = 0f;
 
+                Communicator.UpdateFrame(_animation.CurrentFrame, _animation.AnimationId);
+
                 _animation.CurrentFrame++;
 
                 if (_animation.CurrentFrame >= _animation.FrameCount)
@@ -78,8 +80,7 @@ namespace Game1
             if (HitboxLayout)
                 foreach (Hitbox hitbox in _animation.Hitboxes[_animation.CurrentFrame])
                     hitbox.rect = new Rectangle((Position + hitbox.Offset).ToPoint(), new Point(hitbox.Width, hitbox.Height));                
-                        
-                    
+                            
         }
     }
 }

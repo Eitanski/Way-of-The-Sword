@@ -36,25 +36,27 @@ namespace Game1
         {
             _spriteBatch = new SpriteBatch(GraphicsDevice);
 
+            int idCount = 0;
+
             animations = new Dictionary<champions, Dictionary<string, Animation>>()
             {
                 { champions.Feng, new Dictionary<string, Animation>()
 
-                {{"Run_Left", new Animation(Content.Load<Texture2D>("Feng/Run_Left"), 8) },
-                 { "Run_Right", new Animation(Content.Load<Texture2D>("Feng/Run_Right"), 8) },
-                 { "Jump_Right", new Animation(Content.Load<Texture2D>("Feng/Jump_Right"), 2) },
-                 { "Jump_Left", new Animation(Content.Load<Texture2D>("Feng/Jump_Left"), 2) },
-                 { "Fall_Right", new Animation(Content.Load<Texture2D>("Feng/Fall_Right"), 2) },
-                 { "Fall_Left", new Animation(Content.Load<Texture2D>("Feng/Fall_Left"), 2) },
-                 { "Idle_Right", new Animation(Content.Load<Texture2D>("Feng/Idle_Right"), 8) },
-                 { "Idle_Left", new Animation(Content.Load<Texture2D>("Feng/Idle_Left"), 8) },
-                 { "Attack1_Right", new Animation(Content.Load<Texture2D>("Feng/Attack1_Right"), 6) },
-                 { "Attack_Right", new Animation(Content.Load<Texture2D>("Feng/Attack_Right"), 12) },
-                 { "Attack1_Left", new Animation(Content.Load<Texture2D>("Feng/Attack1_Left"), 6) },
-                 { "Attack_Left", new Animation(Content.Load<Texture2D>("Feng/Attack_Left"), 12) }} }
+                {{"Run_Left", new Animation(Content.Load<Texture2D>("Feng/Run_Left"), 8,idCount++) },
+                 { "Run_Right", new Animation(Content.Load<Texture2D>("Feng/Run_Right"), 8,idCount++) },
+                 { "Jump_Right", new Animation(Content.Load<Texture2D>("Feng/Jump_Right"),2, idCount++) },
+                 { "Jump_Left", new Animation(Content.Load<Texture2D>("Feng/Jump_Left"), 2, idCount++) },
+                 { "Fall_Right", new Animation(Content.Load<Texture2D>("Feng/Fall_Right"), 2, idCount++) },
+                 { "Fall_Left", new Animation(Content.Load<Texture2D>("Feng/Fall_Left"), 2, idCount++) },
+                 { "Idle_Right", new Animation(Content.Load<Texture2D>("Feng/Idle_Right"), 8, idCount++) },
+                 { "Idle_Left", new Animation(Content.Load<Texture2D>("Feng/Idle_Left"), 8, idCount++) },
+                 { "Attack1_Right", new Animation(Content.Load<Texture2D>("Feng/Attack1_Right"), 6, idCount++) },
+                 { "Attack_Right", new Animation(Content.Load<Texture2D>("Feng/Attack_Right"), 12, idCount++) },
+                 { "Attack1_Left", new Animation(Content.Load<Texture2D>("Feng/Attack1_Left"), 6, idCount++) },
+                 { "Attack_Left", new Animation(Content.Load<Texture2D>("Feng/Attack_Left"), 12, idCount++) },
+                 { "Take_Hit", new Animation(Content.Load<Texture2D>("Feng/Take_Hit"), 4, idCount++) }} }
             };
 
-            //animations[champions.Feng]["IdleRight"].Hitboxes;
             hitBoxManager.AquireData(GraphicsDevice);
 
             AnimationManager.HitboxLayout = true;

@@ -10,6 +10,8 @@ namespace Game1
     {
         public int CurrentFrame { get; set; }
 
+        public int AnimationId { get; set; }
+
         public int FrameCount { get; private set; }
 
         public int FrameHeight { get { return Texture.Height; } }
@@ -39,6 +41,8 @@ namespace Game1
 
             FrameSpeed = other.FrameSpeed;
 
+            AnimationId = other.AnimationId;
+
             Hitboxes = new List<List<Hitbox>>();
 
             List<Hitbox> tmpList;
@@ -52,8 +56,10 @@ namespace Game1
             }
         }
 
-        public Animation(Texture2D texture, int frameCount, float frameSpeed = 0.08f)
+        public Animation(Texture2D texture, int frameCount, int animationId,float frameSpeed = 0.08f)
         {
+            AnimationId = animationId;
+
             Texture = texture;
 
             FrameCount = frameCount;

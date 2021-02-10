@@ -11,7 +11,7 @@ namespace Game1
         public int Height { get; set; }
         public int Width { get; set; }
 
-        public bool Mode { get; set; }
+        public bool Mode { get; set; }  
 
         public Vector2 Offset { get; set; }
 
@@ -27,7 +27,7 @@ namespace Game1
                 for (int x = 0; x < Width; x++)
                 {
                     if (x == 0 || y == 0 || x == Width - 1 || y == Height - 1)
-                        pixelData.Add(new Color(0, 255, 0, 0));
+                        pixelData.Add(Mode? Color.LimeGreen: Color.Red);
                     else
                         pixelData.Add(new Color(0, 0, 0, 0));
                 }
@@ -40,11 +40,14 @@ namespace Game1
         {
             Width = (int)(w * frameWidth);
             Height = (int)(h * frameHeight);
+
+            if (Width == 0) Width = 1;
+            if (Height == 0) Height = 1;
+            Mode = mode;
+
             SetHitbox(graphicsDevice);
             Offset = new Vector2(x * frameWidth, y * frameHeight);
-            Mode = mode;
         }
-
 
         public Hitbox(Hitbox other)
         {

@@ -22,7 +22,7 @@ namespace Game1
 
         private static bool flagos = false;
 
-        private static string chunk;
+        public static string chunk;
 
         public static void clientShutDown()
         {
@@ -168,6 +168,11 @@ namespace Game1
         public static void SendJumpRequest()
         {
             Send("103" + chunk);
+        }
+
+        public static void UpdateFrame(int num,int id)
+        {
+            Send("401" + (num > 9 ? "2" : "1") + num.ToString() + (id > 9 ? "2" : "1") + id.ToString() + chunk);
         }
 
     }

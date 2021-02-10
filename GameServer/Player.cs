@@ -8,8 +8,12 @@ using System.Numerics;
 
 namespace GameServer
 {
-    class Player
-    {   
+    public class Player
+    {
+        public Dictionary<string, List<List<List<Hitbox>>>> Hitboxes { get; set; } 
+        public enum Champions { Feng,Ronin}
+        public int CurrentFrame { get; set; }
+        public string CurrentAnimation { get; set; } = "Idle_Right";
 
         private float _relativePos;
 
@@ -34,8 +38,14 @@ namespace GameServer
         public int id = ++count;
 
         public string chunk;
+        public bool Direction { get; set; } = true; // right - true, left - false
 
-        public bool Direction = true; // right - true, left - false
+        public bool Aggro { get; set; } = false;
+
+        public virtual void SetHitboxData()
+        {
+
+        }
 
         public Player()
         {

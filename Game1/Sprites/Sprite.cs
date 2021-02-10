@@ -34,6 +34,8 @@ namespace Game1
         private bool _attack2 = false;
 
         public bool _idle = false;
+
+        private bool _hurt = false;
         #endregion
 
         #region Properties
@@ -114,6 +116,11 @@ namespace Game1
                     _animationManager.Play(_animations["Attack_Right"]);
                 }
             }
+            else if(_hurt && !_stun)
+            {
+                _stun = true;
+                _animationManager.Play(_animations["Take_Hit"]);
+            }
         }
 
         public void Retrieve()
@@ -125,10 +132,10 @@ namespace Game1
                     _animationManager.Stop();
                     Communicator.SendEndofStun();
                     _idle = true;
-
                     _stun = false;
                     _attack1 = false;
                     _attack2 = false;
+                    _hurt = false;
                 }
             }
 
@@ -201,6 +208,9 @@ namespace Game1
                         code = int.Parse(chain[0]);
                         switch (code)
                         {
+                            case 500:
+                                _hurt = true;
+                                break;
                             case 200: // move
                                 if (chain[2] == "r")
                                 {
@@ -261,6 +271,7 @@ namespace Game1
             Position += Velocity;
 
             Velocity.X = 0;
+
         }
 
         #endregion

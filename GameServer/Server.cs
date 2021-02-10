@@ -7,12 +7,30 @@ using System.Threading;
 using System.Net.Sockets;
 using System.Net;
 using System.Runtime.CompilerServices;
+using System.Numerics;
 
 namespace GameServer
 {
     class Server
     {
         private Dictionary<TcpClient, Player> players = new Dictionary<TcpClient,Player>();
+        private HitboxManager hitboxManager = new HitboxManager();
+        private Mutex collisionMutex = new Mutex();
+
+        private string[] setter = new string[] {
+            "Run_Left", 
+             "Run_Right",
+             "Jump_Right", 
+             "Jump_Left", 
+             "Fall_Right", 
+             "Fall_Left", 
+             "Idle_Right", 
+             "Idle_Left", 
+             "Attack1_Right",
+             "Attack_Right",
+             "Attack1_Left",
+             "Attack_Left",
+             "Take_Hit"};        
         public void Run()
         {
             TcpListener serverSocket = new TcpListener(IPAddress.Parse("127.0.0.1"), 11111);
@@ -24,7 +42,7 @@ namespace GameServer
             while (true)
             {
                 clientSocket = serverSocket.AcceptTcpClient();
-                players.Add(clientSocket, new Player());
+                players.Add(clientSocket, new Feng());
                 SendId(players[clientSocket], clientSocket.GetStream());
                 UpdateId();
                 Console.WriteLine("Client No: " + players[clientSocket].id.ToString() + " started!");
@@ -67,7 +85,35 @@ namespace GameServer
             }
             return chain.Substring(0, chain.Length - 1); 
         }
-        
+
+        public void DetectCollsions(Player attacker)
+        {
+            Vector2 tmpDef = new Vector2();
+            Vector2 tmpAtk = new Vector2();
+            foreach (Player defender in players.Values)
+            {
+                if (defender == attacker) continue;
+                //if (attacker.id == 1) Console.WriteLine(attacker.CurrentAnimation + attacker.CurrentFrame);
+                foreach (var redBox in attacker.Hitboxes[attacker.CurrentAnimation][attacker.CurrentFrame][1])
+                {
+                    tmpAtk = attacker.Position + redBox.Offset;
+                    foreach (var greenBox in defender.Hitboxes[defender.CurrentAnimation][defender.CurrentFrame][0])
+                    {
+                        tmpDef = defender.Position + greenBox.Offset;
+                        if (tmpAtk.X + redBox.Width >= tmpDef.X && tmpDef.X + greenBox.Width >= tmpAtk.X &&  // check for x
+                           tmpAtk.Y + redBox.Height >= tmpDef.Y && tmpDef.Y + greenBox.Height >= tmpAtk.Y)   // check for y
+                        {
+                            SendHurt(defender);
+                            defender.Stun = true;
+                        }
+                    }
+                }
+            }
+            
+        }
+
+
+
         private void Disperse(string code, Player player, string data = "")
         {
             foreach(KeyValuePair<TcpClient,Player> val in players)
@@ -105,6 +151,7 @@ namespace GameServer
         {
             if (player.CanDo())
             {
+                player.Aggro = true;
                 player.Stun = true;
                 Disperse("201", player);
             }         
@@ -114,9 +161,15 @@ namespace GameServer
         {
             if (player.CanDo())
             {
+                player.Aggro = true;
                 player.Stun = true;
                 Disperse("202", player);
             }
+        }
+
+        public void SendHurt(Player player)
+        {
+            Disperse("500", player);
         }
 
         public void SendJumpResponse(Player player, NetworkStream stream)
@@ -124,6 +177,8 @@ namespace GameServer
             if (player.CanDo())
             {
                 player.Air = true;
+                //if (player.Direction) player.CurrentAnimation = "Attack1_Right";
+                //else player.CurrentAnimation = "Attack1_Left";
                 Disperse("203", player);
             }
         }
@@ -138,26 +193,33 @@ namespace GameServer
             NetworkStream stream = clientSocket.GetStream();
             string[] chain = req.Split(new char[]{'&'});
             int code = int.Parse(chain[0]);
-            //Console.WriteLine("request from client: " + req);
+            Player player = players[clientSocket];
+            if(player.id == 1) Console.WriteLine("request from client: " + req + " " + player.CurrentAnimation);
             switch (code)
             {
+                case 401:
+                    player.CurrentFrame = int.Parse(chain[1]);
+                    player.CurrentAnimation = setter[int.Parse(chain[2])];
+                    DetectCollsions(player);
+                    break;
                 case 100:
-                    SendMovementResponse(players[clientSocket], chain[2], stream);
+                    SendMovementResponse(player, chain[2], stream);
                     break;
                 case 101:
-                    SendAttack1Response(players[clientSocket], stream);
+                    SendAttack1Response(player, stream);
                     break;
                 case 102:
-                    SendAttack2Response(players[clientSocket], stream);
+                    SendAttack2Response(player, stream);
                     break;      
                 case 103:
-                    SendJumpResponse(players[clientSocket], stream);
+                    SendJumpResponse(player, stream);
                     break;
                 case 300:
-                    players[clientSocket].Stun = false;
+                    player.Stun = false;
                     break;
                 case 400:
-                    players[clientSocket].Air = false;
+                    player.Air = false;
+                    player.Aggro = false;
                     break;
             }
 
