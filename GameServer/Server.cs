@@ -103,6 +103,7 @@ namespace GameServer
                         if (tmpAtk.X + redBox.Width >= tmpDef.X && tmpDef.X + greenBox.Width >= tmpAtk.X &&  // check for x
                            tmpAtk.Y + redBox.Height >= tmpDef.Y && tmpDef.Y + greenBox.Height >= tmpAtk.Y)   // check for y
                         {
+                            Console.WriteLine("HIT");
                             SendHurt(defender);
                             defender.Stun = true;
                         }
@@ -169,7 +170,7 @@ namespace GameServer
 
         public void SendHurt(Player player)
         {
-            Disperse("500", player);
+           Disperse("500", player);
         }
 
         public void SendJumpResponse(Player player, NetworkStream stream)
@@ -177,8 +178,6 @@ namespace GameServer
             if (player.CanDo())
             {
                 player.Air = true;
-                //if (player.Direction) player.CurrentAnimation = "Attack1_Right";
-                //else player.CurrentAnimation = "Attack1_Left";
                 Disperse("203", player);
             }
         }
@@ -194,7 +193,7 @@ namespace GameServer
             string[] chain = req.Split(new char[]{'&'});
             int code = int.Parse(chain[0]);
             Player player = players[clientSocket];
-            if(player.id == 1) Console.WriteLine("request from client: " + req + " " + player.CurrentAnimation);
+            if(player.id == 1 && code != 401) Console.WriteLine("request from client: " + req + " " + player.CurrentAnimation);
             switch (code)
             {
                 case 401:

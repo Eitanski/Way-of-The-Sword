@@ -36,6 +36,8 @@ namespace Game1
         public bool _idle = false;
 
         private bool _hurt = false;
+
+        private bool[] bools = new bool[3];
         #endregion
 
         #region Properties
@@ -136,6 +138,7 @@ namespace Game1
                     _attack1 = false;
                     _attack2 = false;
                     _hurt = false;
+                    fillArray(bools);
                 }
             }
 
@@ -148,17 +151,20 @@ namespace Game1
 
         public virtual void DoAction()
         {
-            if (Keyboard.GetState().IsKeyDown(Champion.Input.Jump) && !_air)
+            if (Keyboard.GetState().IsKeyDown(Champion.Input.Jump) && !bools[0])
             {
                 Communicator.SendJumpRequest();
+                bools[0] = true;
             }
-            else if (Keyboard.GetState().IsKeyDown(Champion.Input.Attack1) && !_attack1)
+            else if (Keyboard.GetState().IsKeyDown(Champion.Input.Attack1) && !bools[1])
             {
                 Communicator.SendAttack1Request();
+                bools[1] = true;
             }
-            else if (Keyboard.GetState().IsKeyDown(Champion.Input.Attack2) && !_attack2)
+            else if (Keyboard.GetState().IsKeyDown(Champion.Input.Attack2) && !bools[2])
             {   
                 Communicator.SendAttack2Request();
+                bools[2] = true;
             }
             else if (Keyboard.GetState().IsKeyDown(Champion.Input.Left))
             {
@@ -275,5 +281,16 @@ namespace Game1
         }
 
         #endregion
+        private void fillArray(bool[] arr)
+        {
+            for (int i = 0; i < arr.Length; i++)
+            {
+                arr[i] = false;
+            }
+        }
+
     }
+
+
+
 }

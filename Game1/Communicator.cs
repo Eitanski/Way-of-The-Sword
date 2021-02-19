@@ -75,7 +75,7 @@ namespace Game1
         {
             try
             {
-                //Console.WriteLine("sent from client " + msg);
+                if(ClientId == 1 && (msg[0] != '4' || msg[2] != '1')) Console.WriteLine("sent from client " + msg);
                 byte[] message = Encoding.ASCII.GetBytes(msg + "1" + "e");
                 stream.Write(message, 0, message.Length);
                 stream.Flush();
@@ -104,7 +104,7 @@ namespace Game1
                 numByte = stream.Read(buffer, 0, len);
                 part = Encoding.ASCII.GetString(buffer, 0, numByte);
             }
-            //Console.WriteLine("received client: " + chain);
+            if (ClientId == 1) Console.WriteLine("received client: " + chain);
             return chain;
         }
 

@@ -42,6 +42,8 @@ namespace GameServer
 
         public bool Aggro { get; set; } = false;
 
+        public bool UnderAttack { get; set; } = false;
+
         public virtual void SetHitboxData()
         {
 
