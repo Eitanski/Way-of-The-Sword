@@ -75,7 +75,7 @@ namespace Game1
         {
             try
             {
-                if(ClientId == 1 && (msg[0] != '4' || msg[2] != '1')) Console.WriteLine("sent from client " + msg);
+                if(msg.Substring(0,3) != "401") Console.WriteLine("sent from client " + msg);
                 byte[] message = Encoding.ASCII.GetBytes(msg + "1" + "e");
                 stream.Write(message, 0, message.Length);
                 stream.Flush();
@@ -104,7 +104,6 @@ namespace Game1
                 numByte = stream.Read(buffer, 0, len);
                 part = Encoding.ASCII.GetString(buffer, 0, numByte);
             }
-            if (ClientId == 1) Console.WriteLine("received client: " + chain);
             return chain;
         }
 
@@ -113,11 +112,13 @@ namespace Game1
             byte[] buffer = new byte[1024];
             string[] chain;
             int tmpId;
-
+            string chainer;
             while (true)
             {
-                chain = Parse(buffer).Split(new char[] { '&' });
+                chainer = Parse(buffer);
+                chain = chainer.Split(new char[] { '&' });
                 tmpId = int.Parse(chain[1]);
+                if (ClientId == tmpId) Console.WriteLine("received client: " + chainer);
                 if (flagos)
                 {
                     if (!coms.ContainsKey(tmpId)) // create a new player

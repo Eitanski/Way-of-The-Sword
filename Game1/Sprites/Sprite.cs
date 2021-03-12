@@ -38,6 +38,8 @@ namespace Game1
         private bool _hurt = false;
 
         private bool[] bools = new bool[3];
+
+        public bool ooga = true;
         #endregion
 
         #region Properties
@@ -132,20 +134,22 @@ namespace Game1
                 if (_animationManager._ended)
                 {
                     _animationManager.Stop();
-                    Communicator.SendEndofStun();
+                    if(ooga) Communicator.SendEndofStun();
                     _idle = true;
                     _stun = false;
                     _attack1 = false;
                     _attack2 = false;
                     _hurt = false;
-                    fillArray(bools);
+
+                    bools[2] = false;
+                    bools[1] = false;
                 }
             }
 
             if (!_air)
             {
                 Velocity.Y = 0;
-            }
+            }   
 
         }
 
@@ -183,8 +187,8 @@ namespace Game1
         protected virtual void SetAnimations()
         {
             string[] chain;
-            int code;   
-            
+            int code;
+
             if (_air)
             {
                 Velocity += Acceleration;
@@ -192,13 +196,14 @@ namespace Game1
                 {
                     _air = false;
                     Velocity = Vector2.Zero;
-                    Communicator.SendEndofAir();
+                    if(ooga) Communicator.SendEndofAir();
+                    bools[0] = false;
                 }
             }
-                               
+
             if (!_stun)
             {
-                if (_idle)
+                if (_idle && !Communicator.CanDo(Id))
                 {
                     if (_direction)
                         _animationManager.Play(_animations["Idle_Right"]);

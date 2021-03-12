@@ -92,8 +92,7 @@ namespace GameServer
             Vector2 tmpAtk = new Vector2();
             foreach (Player defender in players.Values)
             {
-                if (defender == attacker) continue;
-                //if (attacker.id == 1) Console.WriteLine(attacker.CurrentAnimation + attacker.CurrentFrame);
+                if (defender.id == attacker.id || defender.Stun) continue;
                 foreach (var redBox in attacker.Hitboxes[attacker.CurrentAnimation][attacker.CurrentFrame][1])
                 {
                     tmpAtk = attacker.Position + redBox.Offset;
@@ -103,7 +102,7 @@ namespace GameServer
                         if (tmpAtk.X + redBox.Width >= tmpDef.X && tmpDef.X + greenBox.Width >= tmpAtk.X &&  // check for x
                            tmpAtk.Y + redBox.Height >= tmpDef.Y && tmpDef.Y + greenBox.Height >= tmpAtk.Y)   // check for y
                         {
-                            Console.WriteLine("HIT");
+                            Console.WriteLine(attacker.id + " " + attacker.CurrentAnimation + " " + attacker.CurrentFrame + " attacked " + defender.id + " " + defender.CurrentAnimation + " " + defender.CurrentFrame); 
                             SendHurt(defender);
                             defender.Stun = true;
                         }
@@ -128,7 +127,7 @@ namespace GameServer
             try
             {
                 byte[] message = Encoding.ASCII.GetBytes(msg + "1" + "e");
-                //Console.WriteLine("Sent from server: " + msg + "1" + "e");
+                Console.WriteLine("Sent from server: " + msg);
                 stream.Write(message, 0, message.Length);
                 stream.Flush();
             }

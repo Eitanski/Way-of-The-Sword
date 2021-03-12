@@ -15,6 +15,7 @@ namespace Game1
         {
             _direction = dir;
             Champion = character;
+            ooga = false;
         }
 
         public override void Update(GameTime gameTime)
