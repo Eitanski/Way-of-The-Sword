@@ -20,7 +20,9 @@ namespace Game1
 
         public static int ClientId = 0;
 
-        private static bool flagos = false;
+        private static bool newPlayer = false;
+
+        private static bool banish = false;
 
         public static string chunk;
 
@@ -47,7 +49,7 @@ namespace Game1
                 client.Connect("127.0.0.1", 11111);
                 stream = client.GetStream();
                 string[] response = Parse(buffer).Split(new char[] { '&' }); // receiving id
-                flagos = false; 
+                newPlayer = false; 
                 ClientId = int.Parse(response[1]);
                 coms.Add(ClientId, new Tuple<Mutex, Queue<string[]>>(new Mutex(), new Queue<string[]>()));
                 chunk = ClientId.ToString().Length + ClientId.ToString();
@@ -75,7 +77,7 @@ namespace Game1
         {
             try
             {
-                if(msg.Substring(0,3) != "401") Console.WriteLine("sent from client " + msg);
+                //if(msg.Substring(0,3) != "401") Console.WriteLine("sent from client " + msg);
                 byte[] message = Encoding.ASCII.GetBytes(msg + "1" + "e");
                 stream.Write(message, 0, message.Length);
                 stream.Flush();
@@ -94,7 +96,9 @@ namespace Game1
             numByte = stream.Read(buffer, 0, 3); // action type
             part = Encoding.ASCII.GetString(buffer, 0, numByte);
 
-            if (part == "600") flagos = true;
+            if (part == "600") newPlayer = true;
+
+            if (part == "901") banish = true;
 
             while (part != "e")
             {
@@ -118,8 +122,8 @@ namespace Game1
                 chainer = Parse(buffer);
                 chain = chainer.Split(new char[] { '&' });
                 tmpId = int.Parse(chain[1]);
-                if (ClientId == tmpId) Console.WriteLine("received client: " + chainer);
-                if (flagos)
+                //if (ClientId == tmpId) Console.WriteLine("received client: " + chainer);
+                if (newPlayer)
                 {
                     if (!coms.ContainsKey(tmpId)) // create a new player
                     {
@@ -130,7 +134,20 @@ namespace Game1
                         }) ; 
                         coms.Add(tmpId, new Tuple<Mutex, Queue<string[]>>(new Mutex(), new Queue<string[]>()));          
                     }
-                    flagos = false;
+                    newPlayer = false;
+                }
+                else if (banish)
+                {
+                    foreach(Sprite sprite in Game1.sprites)
+                    {
+                        if (sprite.Id == tmpId)
+                        {
+                            coms.Remove(tmpId);
+                            Game1.sprites.Remove(sprite);
+                            break;
+                        }
+                    }
+                    banish = false;
                 }
                 else
                 {
@@ -176,5 +193,9 @@ namespace Game1
             Send("401" + (num > 9 ? "2" : "1") + num.ToString() + (id > 9 ? "2" : "1") + id.ToString() + chunk);
         }
 
+        public static void SendExit()
+        {
+            Send("900" + chunk);
+        }
     }
 }

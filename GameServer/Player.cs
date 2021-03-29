@@ -44,6 +44,8 @@ namespace GameServer
 
         public bool UnderAttack { get; set; } = false;
 
+        public bool Alive { get; set; } = true;
+
         public virtual void SetHitboxData()
         {
 

@@ -57,7 +57,7 @@ namespace Game1
             _animation.CurrentFrame = 0;
         }
 
-        public void Update(GameTime gameTime)
+        public void Update(GameTime gameTime, bool ooga = true)
         {
             _ended = false;
             _timer += (float)gameTime.ElapsedGameTime.TotalSeconds;
@@ -66,7 +66,7 @@ namespace Game1
             {
                 _timer = 0f;
 
-                Communicator.UpdateFrame(_animation.CurrentFrame, _animation.AnimationId);
+                if(ooga) Communicator.UpdateFrame(_animation.CurrentFrame, _animation.AnimationId);
 
                 _animation.CurrentFrame++;
 

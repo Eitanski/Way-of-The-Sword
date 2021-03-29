@@ -62,26 +62,36 @@ namespace GameServer
 
         public void HandleClient(Object clientSocket)
         {
-            while (true)
+            Player player = players[(TcpClient)clientSocket];
+            while (player.Alive)
                 ManageRequest(Receive((TcpClient)clientSocket), (TcpClient)clientSocket);
+
+            Console.WriteLine("lol");
         }
 
         private string Receive(TcpClient clientSocket)
         {
             byte[] buffer = new byte[1024];
             string part, chain = "";
-
-            NetworkStream stream = clientSocket.GetStream();
-
-            int numByte = stream.Read(buffer, 0, 3), len;
-            part = Encoding.ASCII.GetString(buffer, 0, numByte);
-            while(part != "e")
+            try
             {
-                chain += part + "&";
-                numByte = stream.Read(buffer, 0, 1); // read len
-                len = int.Parse(Encoding.ASCII.GetString(buffer, 0, numByte));
-                numByte = stream.Read(buffer, 0, len);
+                NetworkStream stream = clientSocket.GetStream();
+
+                int numByte = stream.Read(buffer, 0, 3), len;
                 part = Encoding.ASCII.GetString(buffer, 0, numByte);
+                while (part != "e")
+                {
+                    chain += part + "&";
+                    numByte = stream.Read(buffer, 0, 1); // read len
+                    len = int.Parse(Encoding.ASCII.GetString(buffer, 0, numByte));
+                    numByte = stream.Read(buffer, 0, len);
+                    part = Encoding.ASCII.GetString(buffer, 0, numByte);
+                }
+            }
+            catch(Exception e)
+            {
+                Console.WriteLine(e.Message);
+
             }
             return chain.Substring(0, chain.Length - 1); 
         }
@@ -90,6 +100,7 @@ namespace GameServer
         {
             Vector2 tmpDef = new Vector2();
             Vector2 tmpAtk = new Vector2();
+            bool attain = false; ;
             foreach (Player defender in players.Values)
             {
                 if (defender.id == attacker.id || defender.Stun) continue;
@@ -102,17 +113,18 @@ namespace GameServer
                         if (tmpAtk.X + redBox.Width >= tmpDef.X && tmpDef.X + greenBox.Width >= tmpAtk.X &&  // check for x
                            tmpAtk.Y + redBox.Height >= tmpDef.Y && tmpDef.Y + greenBox.Height >= tmpAtk.Y)   // check for y
                         {
-                            Console.WriteLine(attacker.id + " " + attacker.CurrentAnimation + " " + attacker.CurrentFrame + " attacked " + defender.id + " " + defender.CurrentAnimation + " " + defender.CurrentFrame); 
                             SendHurt(defender);
                             defender.Stun = true;
+                            attain = true;
                         }
+                        if (attain) break;
                     }
+                    if (attain) break;
                 }
+                if (attain) attain = false;
             }
             
         }
-
-
 
         private void Disperse(string code, Player player, string data = "")
         {
@@ -127,13 +139,14 @@ namespace GameServer
             try
             {
                 byte[] message = Encoding.ASCII.GetBytes(msg + "1" + "e");
-                Console.WriteLine("Sent from server: " + msg);
+                //Console.WriteLine("Sent from server: " + msg);
                 stream.Write(message, 0, message.Length);
                 stream.Flush();
             }
             catch (Exception e)
             {
                 Console.WriteLine(e.Message);
+                Console.WriteLine(msg);
                 Console.ReadLine();
             }
         }
@@ -186,15 +199,26 @@ namespace GameServer
             Send("600" + player.chunk, stream);
         }
 
+        public void sendCancel(Player player)
+        {
+            Disperse("901", player);
+        }
+
         public void ManageRequest(string req, TcpClient clientSocket)
         {
             NetworkStream stream = clientSocket.GetStream();
             string[] chain = req.Split(new char[]{'&'});
             int code = int.Parse(chain[0]);
             Player player = players[clientSocket];
-            if(player.id == 1 && code != 401) Console.WriteLine("request from client: " + req + " " + player.CurrentAnimation);
+            //if(player.id == 1 && code != 401) Console.WriteLine("request from client: " + req + " " + player.CurrentAnimation);
             switch (code)
             {
+                case 900:
+                    sendCancel(player);
+                    player.Alive = false;
+                    stream.Close();
+                    players.Remove(clientSocket);
+                    break;
                 case 401:
                     player.CurrentFrame = int.Parse(chain[1]);
                     player.CurrentAnimation = setter[int.Parse(chain[2])];

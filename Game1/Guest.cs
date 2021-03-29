@@ -26,7 +26,7 @@ namespace Game1
 
             setComplexAnimations();
 
-            _animationManager.Update(gameTime);
+            _animationManager.Update(gameTime, false);
 
             Retrieve();
 

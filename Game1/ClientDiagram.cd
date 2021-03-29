@@ -1,0 +1,95 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<ClassDiagram MajorVersion="1" MinorVersion="1">
+  <Class Name="Game1.AnimationManager">
+    <Position X="10.75" Y="0.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAQAAAIAAAAgAgAgAACAAAAAgAAAAAAAoAAAAAAAAAA=</HashCode>
+      <FileName>Managers\AnimationManager.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Game1.HitBoxFileManager">
+    <Position X="9" Y="5.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>ABAAAAAAAAAAACAAAAAAAAAAAAAAAAAAAAAAAAIAAAA=</HashCode>
+      <FileName>Managers\HitBoxFileManager.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Game1.Animation">
+    <Position X="9" Y="0.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AACAAAAABAAAAACEAAAAAABBASAAAAEAAAIIAAAAACA=</HashCode>
+      <FileName>Models\Animation.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Game1.Input">
+    <Position X="10.75" Y="4.25" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAJAAwAAAAAAAAAAAAAAAAAAAAAACACAAAAAAAI=</HashCode>
+      <FileName>Models\Input.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Game1.Character">
+    <Position X="5.25" Y="0.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAACAAAAAAAAAAAAAAAAAABEAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Sprites\Character.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Game1.Feng">
+    <Position X="5.25" Y="3.25" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Sprites\Feng.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Game1.Sprite">
+    <Position X="3.25" Y="0.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AYSSIIAAAQAAAgAhAAAAIUgBABAIAgAAAAAMiwAEAAA=</HashCode>
+      <FileName>Sprites\Sprite.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Game1.Communicator">
+    <Position X="12.5" Y="0.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>CAAgAAQBCABAAAAAgFAAAAAAEQCCAAAQCAAAJgACAAQ=</HashCode>
+      <FileName>Communicator.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Game1.Game1">
+    <Position X="7.25" Y="0.5" Width="1.5" />
+    <NestedTypes>
+      <Enum Name="Game1.Game1.champions" Collapsed="true">
+        <TypeIdentifier>
+          <NewMemberFileName>Game1.cs</NewMemberFileName>
+        </TypeIdentifier>
+      </Enum>
+    </NestedTypes>
+    <TypeIdentifier>
+      <HashCode>AAQAAAAAAAAAAwAAAAAAAAAAQAAAEAACAIAAAACAIAQ=</HashCode>
+      <FileName>Game1.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Game1.Guest">
+    <Position X="5.25" Y="5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAQAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Guest.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Game1.Hitbox">
+    <Position X="7.25" Y="4.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAABIAAAAAEAAAAIEAAAAAAAAAAAAIAAAAAgAA=</HashCode>
+      <FileName>Hitbox.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Game1.Program">
+    <Position X="9" Y="4.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAABAAAAAA=</HashCode>
+      <FileName>Program.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Font Name="Segoe UI" Size="9" />
+</ClassDiagram>

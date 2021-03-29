@@ -135,7 +135,7 @@ namespace Game1
                 {
                     _animationManager.Stop();
                     if(ooga) Communicator.SendEndofStun();
-                    _idle = true;
+                    _idle = true; 
                     _stun = false;
                     _attack1 = false;
                     _attack2 = false;
@@ -155,17 +155,17 @@ namespace Game1
 
         public virtual void DoAction()
         {
-            if (Keyboard.GetState().IsKeyDown(Champion.Input.Jump) && !bools[0])
+            if (Keyboard.GetState().IsKeyDown(Champion.Input.Jump) && !bools[0] && !_stun)
             {
                 Communicator.SendJumpRequest();
                 bools[0] = true;
             }
-            else if (Keyboard.GetState().IsKeyDown(Champion.Input.Attack1) && !bools[1])
+            else if (Keyboard.GetState().IsKeyDown(Champion.Input.Attack1) && !bools[1] && !_air)
             {
                 Communicator.SendAttack1Request();
                 bools[1] = true;
             }
-            else if (Keyboard.GetState().IsKeyDown(Champion.Input.Attack2) && !bools[2])
+            else if (Keyboard.GetState().IsKeyDown(Champion.Input.Attack2) && !bools[2] && !_air)
             {   
                 Communicator.SendAttack2Request();
                 bools[2] = true;
@@ -278,7 +278,7 @@ namespace Game1
             _animationManager.Update(gameTime);
 
             Retrieve();
-        
+            
             Position += Velocity;
 
             Velocity.X = 0;

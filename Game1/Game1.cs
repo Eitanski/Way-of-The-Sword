@@ -32,6 +32,13 @@ namespace Game1
             base.Initialize();
         }
 
+        protected override void OnExiting(Object sender, EventArgs args)
+        {
+            base.OnExiting(sender, args);
+            Communicator.SendExit();
+            System.Environment.Exit(0);
+        }
+
         protected override void LoadContent()
         {
             _spriteBatch = new SpriteBatch(GraphicsDevice);
