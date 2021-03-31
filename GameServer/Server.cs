@@ -91,7 +91,6 @@ namespace GameServer
             catch(Exception e)
             {
                 Console.WriteLine(e.Message);
-
             }
             return chain.Substring(0, chain.Length - 1); 
         }

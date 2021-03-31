@@ -5,6 +5,12 @@ using System.Threading;
 using System.Collections.Generic;
 using System;
 using Newtonsoft.Json.Linq;
+using MLEM.Ui;
+using MLEM.Ui.Elements;
+using MLEM.Ui.Style;
+using MLEM.Font;
+using MLEM.Textures;
+
 
 namespace Game1
 {
@@ -16,6 +22,8 @@ namespace Game1
         public HitBoxFileManager hitBoxManager = new HitBoxFileManager();
 
         private Sprite background;
+
+        public UiSystem UiSystem;
 
         public static Dictionary<champions, Dictionary<string, Animation>> animations;
 
@@ -42,6 +50,25 @@ namespace Game1
         protected override void LoadContent()
         {
             _spriteBatch = new SpriteBatch(GraphicsDevice);
+
+            var tex = Content.Load<Texture2D>("TestTextures/Test");
+            var style = new UntexturedStyle(_spriteBatch)
+            {
+                Font = new GenericSpriteFont(Content.Load<SpriteFont>("Fonts/alagard")),
+                TextScale = 1.5f,
+                PanelTexture = new NinePatch(new TextureRegion(tex, 0, 8, 24, 24), 8),
+                ButtonTexture = new NinePatch(new TextureRegion(tex, 24, 8, 16, 16), 4),
+                ScrollBarBackground = new NinePatch(new TextureRegion(tex, 12, 0, 4, 8), 1, 1, 2, 2),
+                ScrollBarScrollerTexture = new NinePatch(new TextureRegion(tex, 8, 0, 4, 8), 1, 1, 2, 2)
+            };
+
+            UiSystem = new UiSystem(Window, GraphicsDevice, style);
+
+            var panel = new Panel(Anchor.Center, new Vector2(300, 300), positionOffset: Vector2.Zero);
+
+            panel.AddChild(new Button(Anchor.AutoCenter, new Vector2(200, 50), "press me:3"));
+
+            UiSystem.Add("ExampleUi", panel);
 
             int idCount = 0;
 
@@ -93,27 +120,34 @@ namespace Game1
                 Communicator.clientShutDown();
                 Exit();
             }
-            
+
+            UiSystem.Update(gameTime);
+
             foreach (Sprite sprite in sprites)
             {
                 sprite.Update(gameTime);
             }
+            
 
             base.Update(gameTime);
         }
 
         protected override void Draw(GameTime gameTime)
         {
+            UiSystem.DrawEarly(gameTime, _spriteBatch);
+
             GraphicsDevice.Clear(Color.Transparent);
 
             _spriteBatch.Begin();
 
             background.Draw(_spriteBatch, GraphicsDevice);
-
+            
             foreach (Sprite sprite in sprites)
                 sprite.Draw(_spriteBatch, GraphicsDevice);
 
             _spriteBatch.End();
+
+            UiSystem.Draw(gameTime, _spriteBatch);
 
             base.Draw(gameTime);
         }

@@ -41,7 +41,7 @@ namespace Game1
             }
             return result;
         }
-        public static void Setup()
+        public static void Setup(string champion)
         {
             byte[] buffer = new byte[8];
             try
