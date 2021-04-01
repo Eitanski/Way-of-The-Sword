@@ -6,6 +6,11 @@ using System.Text;
 using Microsoft.Xna.Framework.Input;
 using System.Linq;
 using Microsoft.VisualBasic.FileIO;
+using MLEM.Ui;
+using MLEM.Ui.Elements;
+using MLEM.Ui.Style;
+using MLEM.Font;
+using MLEM.Textures;
 
 namespace Game1
 {
@@ -40,6 +45,7 @@ namespace Game1
         private bool[] bools = new bool[3];
 
         public bool ooga = true;
+
         #endregion
 
         #region Properties
@@ -64,6 +70,10 @@ namespace Game1
         public Vector2 Velocity;
 
         public Vector2 Acceleration = new Vector2(0f, 2f);
+
+        public ProgressBar healthBar = new ProgressBar(Anchor.TopLeft, new Vector2(120, 30), MLEM.Misc.Direction2.Left, 100);
+
+        public Paragraph nickName = new Paragraph(Anchor.TopLeft, 1, "player", true);
 
         #endregion
 
@@ -286,6 +296,7 @@ namespace Game1
         }
 
         #endregion
+
         private void fillArray(bool[] arr)
         {
             for (int i = 0; i < arr.Length; i++)

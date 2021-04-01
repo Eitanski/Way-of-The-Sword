@@ -26,6 +26,8 @@ namespace Game1
 
         public static string chunk;
 
+        public static Mutex newPlayerMutex = new Mutex();
+
         public static void clientShutDown()
         {
             client.Dispose(); 
@@ -111,7 +113,7 @@ namespace Game1
             return chain;
         }
 
-        public static void Receive() // returns the response in a string array
+        public static void Receive() 
         {
             byte[] buffer = new byte[1024];
             string[] chain;
@@ -122,22 +124,24 @@ namespace Game1
                 chainer = Parse(buffer);
                 chain = chainer.Split(new char[] { '&' });
                 tmpId = int.Parse(chain[1]);
-                //if (ClientId == tmpId) Console.WriteLine("received client: " + chainer);
                 if (newPlayer)
                 {
                     if (!coms.ContainsKey(tmpId)) // create a new player
                     {
+                        newPlayerMutex.WaitOne();
                         Game1.sprites.Add(new Guest(CloneAnimations(Game1.animations[Game1.champions.Feng]), tmpId, chain[3] == "1",new Feng())
                         {
                             Position = new Vector2(float.Parse(chain[2]), Sprite.ground.Y),
                             Id = tmpId
-                        }) ; 
+                        }) ;
+                        newPlayerMutex.ReleaseMutex();
                         coms.Add(tmpId, new Tuple<Mutex, Queue<string[]>>(new Mutex(), new Queue<string[]>()));          
                     }
                     newPlayer = false;
                 }
                 else if (banish)
                 {
+                    newPlayerMutex.WaitOne();
                     foreach(Sprite sprite in Game1.sprites)
                     {
                         if (sprite.Id == tmpId)
@@ -148,6 +152,7 @@ namespace Game1
                         }
                     }
                     banish = false;
+                    newPlayerMutex.ReleaseMutex();
                 }
                 else
                 {

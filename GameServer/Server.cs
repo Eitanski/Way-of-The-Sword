@@ -65,8 +65,6 @@ namespace GameServer
             Player player = players[(TcpClient)clientSocket];
             while (player.Alive)
                 ManageRequest(Receive((TcpClient)clientSocket), (TcpClient)clientSocket);
-
-            Console.WriteLine("lol");
         }
 
         private string Receive(TcpClient clientSocket)

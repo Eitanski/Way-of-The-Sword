@@ -192,6 +192,7 @@ namespace Game1
             panel.AddChild(btnFight);
             panel.AddChild(btnFeng);
             panel.AddChild(btnKnight);
+            panel.AddChild(btnPlay);
 
             UiSystem.Add("StartMenu", panel);
         }
