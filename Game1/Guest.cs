@@ -32,6 +32,8 @@ namespace Game1
 
             Position += Velocity;
 
+            UpdateMiscs();
+
             Velocity.X = 0;
 
         }

@@ -11,7 +11,7 @@ namespace GameServer
     public class Player
     {
         public Dictionary<string, List<List<List<Hitbox>>>> Hitboxes { get; set; } 
-        public enum Champions { Feng,Ronin}
+        public enum Champions { Feng,Knight}
         public int CurrentFrame { get; set; }
         public string CurrentAnimation { get; set; } = "Idle_Right";
 
@@ -20,6 +20,8 @@ namespace GameServer
         private bool _attack1 = false;
 
         private bool _attack2 = false;
+
+        public int Health { get; set; } = 100;
 
         public float Speed = 5f;
 

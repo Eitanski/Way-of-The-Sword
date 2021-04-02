@@ -59,6 +59,7 @@
     <Compile Include="Feng.cs" />
     <Compile Include="Hitbox.cs" />
     <Compile Include="HitboxManager.cs" />
+    <Compile Include="Knight.cs" />
     <Compile Include="Player.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

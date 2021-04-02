@@ -31,7 +31,8 @@ namespace Game1
                 Right = Keys.Right,
                 Jump = Keys.Space,
                 Attack1 = Keys.A,
-                Attack2 = Keys.S
+                Attack2 = Keys.S,
+                Attack3 = Keys.D
             };
         }
 

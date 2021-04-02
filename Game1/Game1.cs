@@ -54,6 +54,7 @@ namespace Game1
             _spriteBatch = new SpriteBatch(GraphicsDevice);
 
             var tex = Content.Load<Texture2D>("TestTextures/Test");
+
             var style = new UntexturedStyle(_spriteBatch)
             {
                 Font = new GenericSpriteFont(Content.Load<SpriteFont>("Fonts/alagard")),
@@ -68,22 +69,23 @@ namespace Game1
 
             var pnlOptions = new Panel(Anchor.Center, new Vector2(350, 400), positionOffset: Vector2.Zero) { IsHidden = true};
             var btnOptions = new Button(Anchor.TopLeft, new Vector2(200, 50), "Options") { PositionOffset = new Vector2(15, 15) };
-            var btnHitbox = new Button(Anchor.TopLeft, new Vector2(220, 50), "HitboxLayout:") { PositionOffset = new Vector2(25, 35), IsHidden = true };
-            var prgHitbox = new Paragraph(Anchor.TopRight, 1, "Off", true) { PositionOffset = new Vector2(25, 43) };
-            var btnExit = new Button(Anchor.BottomCenter, new Vector2(220, 50), "Exit Game") { PositionOffset = new Vector2(0, 40), IsHidden = true };
+            var btnHitbox = new Button(Anchor.TopLeft, new Vector2(220, 50), "HitboxLayout:") { PositionOffset = new Vector2(25, 25)};
+            var prgHitbox = new Paragraph(Anchor.TopRight, 1, "Off", true) { PositionOffset = new Vector2(25, 33) };
+            var btnExit = new Button(Anchor.Center, new Vector2(220, 50), "Exit Game") { PositionOffset = new Vector2(0, -70)};
+            var btnOk = new Button(Anchor.BottomCenter, new Vector2(220, 50), "Ok") { PositionOffset = new Vector2(0, 30)};
 
             btnOptions.OnPressed = e =>
             {
-                if(pnlOptions.IsHidden == true)
-                {
-                    pnlOptions.IsHidden = false;
-                    foreach (var child in pnlOptions.GetChildren()) child.IsHidden = false; 
-                }
-                else
-                {
-                    pnlOptions.IsHidden = true;
-                    foreach (var child in pnlOptions.GetChildren()) child.IsHidden = true;
-                }
+                pnlOptions.IsHidden = false;
+                foreach (var child in pnlOptions.GetChildren()) child.IsHidden = false;
+                btnOptions.IsDisabled = true;
+            };
+
+            btnOk.OnPressed = e =>
+            {
+                pnlOptions.IsHidden = true;
+                foreach (var child in pnlOptions.GetChildren()) child.IsHidden = true;
+                btnOptions.IsDisabled = false;
             };
 
             btnHitbox.OnPressed = e => 
@@ -108,6 +110,7 @@ namespace Game1
             pnlOptions.AddChild(btnHitbox);
             pnlOptions.AddChild(prgHitbox);
             pnlOptions.AddChild(btnExit);
+            pnlOptions.AddChild(btnOk);
             UiSystem.Add("OptionsPanel", pnlOptions);
             UiSystem.Add("OptionsButton",btnOptions);
 
@@ -147,6 +150,9 @@ namespace Game1
                 Champion = new Feng(),
                 }
             };
+
+            UiSystem.Add(sprites[0].Id.ToString() + "h",sprites[0].healthBar);
+            UiSystem.Add(sprites[0].Id.ToString() + "n", sprites[0].nickName);
 
             Thread thr = new Thread(Communicator.Receive);
             thr.Start();

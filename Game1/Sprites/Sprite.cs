@@ -71,7 +71,7 @@ namespace Game1
 
         public Vector2 Acceleration = new Vector2(0f, 2f);
 
-        public ProgressBar healthBar = new ProgressBar(Anchor.TopLeft, new Vector2(120, 30), MLEM.Misc.Direction2.Left, 100);
+        public ProgressBar healthBar = new ProgressBar(Anchor.TopLeft, new Vector2(90, 10), MLEM.Misc.Direction2.Left, 100);
 
         public Paragraph nickName = new Paragraph(Anchor.TopLeft, 1, "player", true);
 
@@ -231,6 +231,7 @@ namespace Game1
                         {
                             case 500:
                                 _hurt = true;
+                                healthBar.CurrentValue += 10;
                                 break;
                             case 200: // move
                                 if (chain[2] == "r")
@@ -277,6 +278,12 @@ namespace Game1
             _texture = texture;
         }
 
+        public void UpdateMiscs()
+        {
+            healthBar.PositionOffset = Position + new Vector2(160, 130);
+            nickName.PositionOffset = Position + new Vector2(160, 100);
+        }
+
         public virtual void Update(GameTime gameTime)
         {
             DoAction();
@@ -290,6 +297,8 @@ namespace Game1
             Retrieve();
             
             Position += Velocity;
+
+            UpdateMiscs();
 
             Velocity.X = 0;
 

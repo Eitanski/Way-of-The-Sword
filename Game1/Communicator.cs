@@ -134,6 +134,8 @@ namespace Game1
                             Position = new Vector2(float.Parse(chain[2]), Sprite.ground.Y),
                             Id = tmpId
                         }) ;
+                        Game1.UiSystem.Add(tmpId.ToString() + "h",Game1.sprites[Game1.sprites.Count - 1].healthBar);
+                        Game1.UiSystem.Add(tmpId.ToString() + "n", Game1.sprites[Game1.sprites.Count - 1].nickName);
                         newPlayerMutex.ReleaseMutex();
                         coms.Add(tmpId, new Tuple<Mutex, Queue<string[]>>(new Mutex(), new Queue<string[]>()));          
                     }

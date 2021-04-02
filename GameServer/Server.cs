@@ -112,6 +112,7 @@ namespace GameServer
                         {
                             SendHurt(defender);
                             defender.Stun = true;
+                            defender.Health -= 10;
                             attain = true;
                         }
                         if (attain) break;
