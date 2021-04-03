@@ -2,11 +2,16 @@
 using System;
 using System.Collections.Generic;
 using System.Text;
+using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Graphics;
 
 namespace Game1
 {
     class Knight:Character
     {
+        public static Vector2 ground = Vector2.Zero;
+        public static Vector2 nickNameOffset = new Vector2(60, -20);
+        public static Vector2 healthBarOffset = new Vector2(60, 10);
         public Knight() : base(5f)
         {
             _animations = new Dictionary<string, string>

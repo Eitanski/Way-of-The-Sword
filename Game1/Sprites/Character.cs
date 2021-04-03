@@ -12,7 +12,7 @@ namespace Game1
         }
 
         protected Dictionary<string, string> _animations;
-        
+
         public float Speed { get; set; }
         public float Health { get; set; }
         public Input Input { get; set; }

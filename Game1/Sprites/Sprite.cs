@@ -46,6 +46,12 @@ namespace Game1
 
         public bool ooga = true;
 
+        private Vector2 healthBarOffset;
+
+        private Vector2 nickNameOffset;
+
+        //public Game1.champions champ;
+
         #endregion
 
         #region Properties
@@ -267,10 +273,21 @@ namespace Game1
 
         public Sprite() { }
 
-        public Sprite(Dictionary<string, Animation> animations)
+        public Sprite(Dictionary<string, Animation> animations, Game1.champions champ)
         {
             _animations = animations;
             _animationManager = new AnimationManager(_animations.First().Value);
+
+            if (champ == Game1.champions.Feng)
+            {
+                healthBarOffset = Feng.healthBarOffset;
+                nickNameOffset = Feng.nickNameOffset;
+            }
+            else
+            {
+                healthBarOffset = Knight.healthBarOffset;
+                nickNameOffset = Knight.nickNameOffset;
+            }
         }
 
         public Sprite(Texture2D texture)
@@ -280,8 +297,8 @@ namespace Game1
 
         public void UpdateMiscs()
         {
-            healthBar.PositionOffset = Position + new Vector2(160, 130);
-            nickName.PositionOffset = Position + new Vector2(160, 100);
+            healthBar.PositionOffset = Position + healthBarOffset;
+            nickName.PositionOffset = Position + nickNameOffset;
         }
 
         public virtual void Update(GameTime gameTime)

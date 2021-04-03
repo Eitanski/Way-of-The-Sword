@@ -11,6 +11,7 @@ namespace GameServer
         public Feng() : base()
         {
             SetHitboxData();
+            champ = Champions.Feng;
         }
 
         public override void SetHitboxData()

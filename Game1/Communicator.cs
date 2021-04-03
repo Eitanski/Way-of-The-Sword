@@ -50,6 +50,7 @@ namespace Game1
             {
                 client.Connect("127.0.0.1", 11111);
                 stream = client.GetStream();
+                SendChampion(champion);
                 string[] response = Parse(buffer).Split(new char[] { '&' }); // receiving id
                 newPlayer = false; 
                 ClientId = int.Parse(response[1]);
@@ -119,6 +120,8 @@ namespace Game1
             string[] chain;
             int tmpId;
             string chainer;
+            Game1.champions tmpChamp;
+            Vector2 ground;
             while (true)
             {
                 chainer = Parse(buffer);
@@ -129,14 +132,16 @@ namespace Game1
                     if (!coms.ContainsKey(tmpId)) // create a new player
                     {
                         newPlayerMutex.WaitOne();
-                        Game1.sprites.Add(new Guest(CloneAnimations(Game1.animations[Game1.champions.Feng]), tmpId, chain[3] == "1",new Feng())
+                        tmpChamp = chain[4] == "1" ? Game1.champions.Feng : Game1.champions.Knight;
+                        ground = tmpChamp == Game1.champions.Feng ? Feng.ground : Knight.ground;
+                        Game1.sprites.Add(new Guest(CloneAnimations(Game1.animations[tmpChamp]), chain[3] == "1", tmpChamp)
                         {
-                            Position = new Vector2(float.Parse(chain[2]), Sprite.ground.Y),
+                            Position = new Vector2(float.Parse(chain[2]), ground.Y),
                             Id = tmpId
                         }) ;
                         Game1.UiSystem.Add(tmpId.ToString() + "h",Game1.sprites[Game1.sprites.Count - 1].healthBar);
                         Game1.UiSystem.Add(tmpId.ToString() + "n", Game1.sprites[Game1.sprites.Count - 1].nickName);
-                        newPlayerMutex.ReleaseMutex();
+                        newPlayerMutex.ReleaseMutex();  
                         coms.Add(tmpId, new Tuple<Mutex, Queue<string[]>>(new Mutex(), new Queue<string[]>()));          
                     }
                     newPlayer = false;
@@ -203,6 +208,11 @@ namespace Game1
         public static void SendExit()
         {
             Send("900" + chunk);
+        }
+
+        public static void SendChampion(string champ)
+        {
+            Send("700" + (champ == "feng" ? 1 : 0) + chunk);
         }
     }
 }

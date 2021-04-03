@@ -2,11 +2,17 @@
 using System;
 using System.Collections.Generic;
 using System.Text;
+using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Graphics;
 
 namespace Game1
 {
     public class Feng : Character
     {
+        public static Vector2 ground = Vector2.Zero;
+        public static Vector2 nickNameOffset = new Vector2(160, 100);
+        public static Vector2 healthBarOffset = new Vector2(160, 130);
+
         public Feng() : base(5f)
         {
             _animations = new Dictionary<string, string>

@@ -14,7 +14,7 @@ namespace Game1
         public HitBoxFileManager()
         {
             jsonData = JObject.Parse(File.ReadAllText(@"..\..\..\Hitboxes.json"));
-            types = new Dictionary<Game1.champions, string>() { { Game1.champions.Feng, "Feng" }, { Game1.champions.Ronin, "Ronin" } };
+            types = new Dictionary<Game1.champions, string>() { { Game1.champions.Feng, "Feng" }, { Game1.champions.Ronin, "Ronin" }, { Game1.champions.Knight, "Knight" } };
         }
 
         public void AquireData(GraphicsDevice dev) // for each animation

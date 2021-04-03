@@ -11,6 +11,7 @@ namespace GameServer
         public Knight() : base()
         {
             SetHitboxData();
+            champ = Champions.Knight;
         }
 
         public override void SetHitboxData()

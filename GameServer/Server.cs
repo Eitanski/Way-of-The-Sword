@@ -35,6 +35,7 @@ namespace GameServer
         {
             TcpListener serverSocket = new TcpListener(IPAddress.Parse("127.0.0.1"), 11111);
             TcpClient clientSocket = default(TcpClient);
+            string[] tmpChampMsg;
 
             serverSocket.Start();
             Console.WriteLine("Server Started");
@@ -42,10 +43,14 @@ namespace GameServer
             while (true)
             {
                 clientSocket = serverSocket.AcceptTcpClient();
-                players.Add(clientSocket, new Feng());
+                tmpChampMsg = Receive(clientSocket).Split(new char[] { '&' });
+                if(tmpChampMsg[1] == "1")
+                    players.Add(clientSocket, new Feng());
+                else
+                    players.Add(clientSocket, new Knight());
                 SendId(players[clientSocket], clientSocket.GetStream());
                 UpdateId();
-                Console.WriteLine("Client No: " + players[clientSocket].id.ToString() + " started!");
+                Console.WriteLine("Client No: " + players[clientSocket].id.ToString() + " started! (" + tmpChampMsg[1] == "1" ? "Feng" : "Knight" + ")");
                 Console.WriteLine("Connected to " + clientSocket.Client.RemoteEndPoint.ToString());
                 Thread newClient = new Thread(new ParameterizedThreadStart(HandleClient));
                 newClient.Start(clientSocket);
@@ -56,7 +61,7 @@ namespace GameServer
         {
             foreach (Player client in players.Values)
             {
-                Disperse("600", client, client.Position.X.ToString().Length + client.Position.X.ToString() + "1" + (client.Direction ? 1 : 0));
+                Disperse("600", client, client.Position.X.ToString().Length + client.Position.X.ToString() + "1" + (client.Direction ? 1 : 0) + "1" + (client.champ == Player.Champions.Feng ? "1" : "0"));
             }
         }
 

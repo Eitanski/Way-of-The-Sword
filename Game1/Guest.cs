@@ -11,10 +11,15 @@ namespace Game1
 {
     class Guest : Sprite
     {      
-        public Guest(Dictionary<string, Animation> animations, int guestId, bool dir, Character character) : base(animations)
+        public Guest(Dictionary<string, Animation> animations, bool dir, Game1.champions champ) : base(animations, champ)
         {
             _direction = dir;
-            Champion = character;
+
+            if (champ == Game1.champions.Feng)
+                Champion = new Feng();
+            else
+                Champion = new Knight();
+
             ooga = false;
         }
 

@@ -13,7 +13,7 @@ namespace GameServer
     {
 
         private JObject jsonData;
-        private Dictionary<Player.Champions,string> types = new Dictionary<Player.Champions, string>() { { Player.Champions.Feng, "Feng" }, { Player.Champions.Ronin, "Ronin" } };
+        private Dictionary<Player.Champions,string> types = new Dictionary<Player.Champions, string>() { { Player.Champions.Feng, "Feng" }, { Player.Champions.Knight, "Knight" } };
         static public Dictionary<Player.Champions, Dictionary<string, List<List<List<Hitbox>>>>> HitboxData { get; set; }
         public HitboxManager()
         {
@@ -35,7 +35,25 @@ namespace GameServer
                  { "Attack1_Left", new List<List<List<Hitbox>>>()},
                  { "Attack_Left", new List<List<List<Hitbox>>>() },
                  { "Take_Hit", new List<List<List<Hitbox>>>()}
-                 }}};
+                 }},
+
+                { Player.Champions.Knight, new Dictionary<string, List<List<List<Hitbox>>>>()
+
+                {{"Run_Left", new List<List<List<Hitbox>>>()},
+                 { "Run_Right", new List<List<List<Hitbox>>>()},
+                 { "Jump_Right", new List<List<List<Hitbox>>>()},
+                 { "Jump_Left", new List<List<List<Hitbox>>>()},
+                 { "Fall_Right", new List<List<List<Hitbox>>>()},
+                 { "Fall_Left", new List<List<List<Hitbox>>>()},
+                 { "Idle_Right", new List<List<List<Hitbox>>>()},
+                 { "Idle_Left", new List<List<List<Hitbox>>>()},
+                 { "Attack1_Right", new List<List<List<Hitbox>>>()},
+                 { "Attack_Right", new List<List<List<Hitbox>>>()},
+                 { "Attack1_Left", new List<List<List<Hitbox>>>()},
+                 { "Attack_Left", new List<List<List<Hitbox>>>() },
+                 { "Take_Hit", new List<List<List<Hitbox>>>()}
+                 }}
+            };
 
             AquireData();
         }

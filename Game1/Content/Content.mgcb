@@ -221,6 +221,30 @@
 /processorParam:TextureFormat=Compressed
 /build:Fonts/TestFontItalic.spritefont
 
+#begin Knight/Attack_Left.png
+/importer:TextureImporter
+/processor:TextureProcessor
+/processorParam:ColorKeyColor=255,0,255,255
+/processorParam:ColorKeyEnabled=True
+/processorParam:GenerateMipmaps=False
+/processorParam:PremultiplyAlpha=True
+/processorParam:ResizeToPowerOfTwo=False
+/processorParam:MakeSquare=False
+/processorParam:TextureFormat=Color
+/build:Knight/Attack_Left.png
+
+#begin Knight/Attack_Right.png
+/importer:TextureImporter
+/processor:TextureProcessor
+/processorParam:ColorKeyColor=255,0,255,255
+/processorParam:ColorKeyEnabled=True
+/processorParam:GenerateMipmaps=False
+/processorParam:PremultiplyAlpha=True
+/processorParam:ResizeToPowerOfTwo=False
+/processorParam:MakeSquare=False
+/processorParam:TextureFormat=Color
+/build:Knight/Attack_Right.png
+
 #begin Knight/Attack1_Left.png
 /importer:TextureImporter
 /processor:TextureProcessor
@@ -244,30 +268,6 @@
 /processorParam:MakeSquare=False
 /processorParam:TextureFormat=Color
 /build:Knight/Attack1_Right.png
-
-#begin Knight/Attack2_Left.png
-/importer:TextureImporter
-/processor:TextureProcessor
-/processorParam:ColorKeyColor=255,0,255,255
-/processorParam:ColorKeyEnabled=True
-/processorParam:GenerateMipmaps=False
-/processorParam:PremultiplyAlpha=True
-/processorParam:ResizeToPowerOfTwo=False
-/processorParam:MakeSquare=False
-/processorParam:TextureFormat=Color
-/build:Knight/Attack2_Left.png
-
-#begin Knight/Attack2_Right.png
-/importer:TextureImporter
-/processor:TextureProcessor
-/processorParam:ColorKeyColor=255,0,255,255
-/processorParam:ColorKeyEnabled=True
-/processorParam:GenerateMipmaps=False
-/processorParam:PremultiplyAlpha=True
-/processorParam:ResizeToPowerOfTwo=False
-/processorParam:MakeSquare=False
-/processorParam:TextureFormat=Color
-/build:Knight/Attack2_Right.png
 
 #begin Knight/Attack3_Left.png
 /importer:TextureImporter
@@ -401,18 +401,6 @@
 /processorParam:TextureFormat=Color
 /build:Knight/Hurt_Left.png
 
-#begin Knight/Hurt_Right.png
-/importer:TextureImporter
-/processor:TextureProcessor
-/processorParam:ColorKeyColor=255,0,255,255
-/processorParam:ColorKeyEnabled=True
-/processorParam:GenerateMipmaps=False
-/processorParam:PremultiplyAlpha=True
-/processorParam:ResizeToPowerOfTwo=False
-/processorParam:MakeSquare=False
-/processorParam:TextureFormat=Color
-/build:Knight/Hurt_Right.png
-
 #begin Knight/Idle_Left.png
 /importer:TextureImporter
 /processor:TextureProcessor
@@ -484,6 +472,18 @@
 /processorParam:MakeSquare=False
 /processorParam:TextureFormat=Color
 /build:Knight/Run_Right.png
+
+#begin Knight/Take_Hit.png
+/importer:TextureImporter
+/processor:TextureProcessor
+/processorParam:ColorKeyColor=255,0,255,255
+/processorParam:ColorKeyEnabled=True
+/processorParam:GenerateMipmaps=False
+/processorParam:PremultiplyAlpha=True
+/processorParam:ResizeToPowerOfTwo=False
+/processorParam:MakeSquare=False
+/processorParam:TextureFormat=Color
+/build:Knight/Take_Hit.png
 
 #begin maps/pixel hills.png
 /importer:TextureImporter

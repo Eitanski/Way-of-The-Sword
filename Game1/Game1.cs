@@ -18,7 +18,7 @@ namespace Game1
     {
         private GraphicsDeviceManager _graphics;
         private SpriteBatch _spriteBatch;
-        public enum champions {Feng, Ronin };
+        public enum champions {Feng,Knight, Ronin };
         public HitBoxFileManager hitBoxManager = new HitBoxFileManager();
 
         private Sprite background;
@@ -31,6 +31,7 @@ namespace Game1
 
         public Game1()
         {
+            Window.Title = "Way of The Sword";
             _graphics = new GraphicsDeviceManager(this);
             Content.RootDirectory = "Content";
             IsMouseVisible = true;
@@ -114,40 +115,74 @@ namespace Game1
             UiSystem.Add("OptionsPanel", pnlOptions);
             UiSystem.Add("OptionsButton",btnOptions);
 
-            int idCount = 0;
+            int idCount1 = 0;
+            int idCount2 = 0;
 
             animations = new Dictionary<champions, Dictionary<string, Animation>>()
             {
                 { champions.Feng, new Dictionary<string, Animation>()
 
-                {{"Run_Left", new Animation(Content.Load<Texture2D>("Feng/Run_Left"), 8,idCount++) },
-                 { "Run_Right", new Animation(Content.Load<Texture2D>("Feng/Run_Right"), 8,idCount++) },
-                 { "Jump_Right", new Animation(Content.Load<Texture2D>("Feng/Jump_Right"),2, idCount++) },
-                 { "Jump_Left", new Animation(Content.Load<Texture2D>("Feng/Jump_Left"), 2, idCount++) },
-                 { "Fall_Right", new Animation(Content.Load<Texture2D>("Feng/Fall_Right"), 2, idCount++) },
-                 { "Fall_Left", new Animation(Content.Load<Texture2D>("Feng/Fall_Left"), 2, idCount++) },
-                 { "Idle_Right", new Animation(Content.Load<Texture2D>("Feng/Idle_Right"), 8, idCount++) },
-                 { "Idle_Left", new Animation(Content.Load<Texture2D>("Feng/Idle_Left"), 8, idCount++) },
-                 { "Attack1_Right", new Animation(Content.Load<Texture2D>("Feng/Attack1_Right"), 6, idCount++) },
-                 { "Attack_Right", new Animation(Content.Load<Texture2D>("Feng/Attack_Right"), 12, idCount++) },
-                 { "Attack1_Left", new Animation(Content.Load<Texture2D>("Feng/Attack1_Left"), 6, idCount++) },
-                 { "Attack_Left", new Animation(Content.Load<Texture2D>("Feng/Attack_Left"), 12, idCount++) },
-                 { "Take_Hit", new Animation(Content.Load<Texture2D>("Feng/Take_Hit"), 4, idCount++) }} }
+                {{"Run_Left", new Animation(Content.Load<Texture2D>("Feng/Run_Left"), 8,idCount1++) },
+                 { "Run_Right", new Animation(Content.Load<Texture2D>("Feng/Run_Right"), 8,idCount1++) },
+                 { "Jump_Right", new Animation(Content.Load<Texture2D>("Feng/Jump_Right"),2, idCount1++) },
+                 { "Jump_Left", new Animation(Content.Load<Texture2D>("Feng/Jump_Left"), 2, idCount1++) },
+                 { "Fall_Right", new Animation(Content.Load<Texture2D>("Feng/Fall_Right"), 2, idCount1++) },
+                 { "Fall_Left", new Animation(Content.Load<Texture2D>("Feng/Fall_Left"), 2, idCount1++) },
+                 { "Idle_Right", new Animation(Content.Load<Texture2D>("Feng/Idle_Right"), 8, idCount1++) },
+                 { "Idle_Left", new Animation(Content.Load<Texture2D>("Feng/Idle_Left"), 8, idCount1++) },
+                 { "Attack1_Right", new Animation(Content.Load<Texture2D>("Feng/Attack1_Right"), 6, idCount1++) },
+                 { "Attack_Right", new Animation(Content.Load<Texture2D>("Feng/Attack_Right"), 12, idCount1++) },
+                 { "Attack1_Left", new Animation(Content.Load<Texture2D>("Feng/Attack1_Left"), 6, idCount1++) },
+                 { "Attack_Left", new Animation(Content.Load<Texture2D>("Feng/Attack_Left"), 12, idCount1++) },
+                 { "Take_Hit", new Animation(Content.Load<Texture2D>("Feng/Take_Hit"), 4, idCount1++) }} },
+
+                {champions.Knight, new Dictionary<string, Animation>()
+
+                {{"Run_Left", new Animation(Content.Load<Texture2D>("Knight/Run_Left"), 10,idCount2++) },
+                 { "Run_Right", new Animation(Content.Load<Texture2D>("Knight/Run_Right"), 10,idCount2++) },
+                 { "Jump_Right", new Animation(Content.Load<Texture2D>("Knight/Jump_Right"),3, idCount2++) },
+                 { "Jump_Left", new Animation(Content.Load<Texture2D>("Knight/Jump_Left"), 3, idCount2++) },
+                 { "Fall_Right", new Animation(Content.Load<Texture2D>("Knight/Fall_Right"), 4, idCount2++) },
+                 { "Fall_Left", new Animation(Content.Load<Texture2D>("Knight/Fall_Left"), 4, idCount2++) },
+                 { "Idle_Right", new Animation(Content.Load<Texture2D>("Knight/Idle_Right"), 8, idCount2++) },
+                 { "Idle_Left", new Animation(Content.Load<Texture2D>("Knight/Idle_Left"), 8, idCount2++) },
+                 { "Attack1_Right", new Animation(Content.Load<Texture2D>("Knight/Attack1_Right"), 6, idCount2++) },
+                 { "Attack_Right", new Animation(Content.Load<Texture2D>("Knight/Attack_Right"), 6, idCount2++) },
+                 { "Attack1_Left", new Animation(Content.Load<Texture2D>("Knight/Attack1_Left"), 6, idCount2++) },
+                 { "Attack_Left", new Animation(Content.Load<Texture2D>("Knight/Attack_Left"), 6, idCount2++) },
+                 { "Take_Hit", new Animation(Content.Load<Texture2D>("Knight/Take_Hit"), 3, idCount2++) }}}
             };
 
             hitBoxManager.AquireData(GraphicsDevice);
 
             background = new Sprite(Content.Load<Texture2D>("maps/pixel hills"));
 
-            Sprite.ground = new Vector2(100, GraphicsDevice.Viewport.Height - 270);
+            Feng.ground = new Vector2(100, GraphicsDevice.Viewport.Height - 270);
+            Knight.ground = new Vector2(100, GraphicsDevice.Viewport.Height - 130);
+
+            champions champ = StartMenu.champion == "feng" ? champions.Feng : champions.Knight;
+
+            Character character;
+            Vector2 g;
+
+            if (champ == champions.Feng)
+            {
+                character = new Feng();
+                g = Feng.ground;
+            }
+            else
+            {
+                character = new Knight();
+                g = Knight.ground;
+            }
 
             sprites = new List<Sprite>()
             {
-                new Sprite(animations[champions.Feng]) 
+                new Sprite(animations[champ],champ)
                 {
-                Position = new Vector2(Sprite.ground.X, Sprite.ground.Y),
+                Position = new Vector2(g.X, g.Y),
                 Id = Communicator.ClientId,
-                Champion = new Feng(),
+                Champion = character
                 }
             };
 

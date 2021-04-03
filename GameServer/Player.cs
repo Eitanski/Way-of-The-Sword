@@ -12,6 +12,8 @@ namespace GameServer
     {
         public Dictionary<string, List<List<List<Hitbox>>>> Hitboxes { get; set; } 
         public enum Champions { Feng,Knight}
+
+        public Champions champ;
         public int CurrentFrame { get; set; }
         public string CurrentAnimation { get; set; } = "Idle_Right";
 
