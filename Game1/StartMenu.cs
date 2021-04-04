@@ -216,8 +216,7 @@ namespace Game1
                     UiSystem.Dispose();
                     titleUi.Dispose();
                     Exit();
-                    Communicator.Setup(champion,nickName);
-                    champion = "none";
+                    Communicator.Setup(champion,nickName);                    
                 }
             };
 

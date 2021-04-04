@@ -23,11 +23,15 @@ namespace Game1
 
         private Sprite background;
 
+        public static int vicCount;
+
         public static UiSystem UiSystem;
 
         public static Panel pnlDefeat;
 
-        public static Panel pnlVictory;
+        private double vicTimeCount;
+
+        public static Button btnVictory;
 
         public static Dictionary<champions, Dictionary<string, Animation>> animations;
 
@@ -59,6 +63,9 @@ namespace Game1
 
             var tex = Content.Load<Texture2D>("TestTextures/Test");
 
+            vicCount = 0;
+            vicTimeCount = 0;
+
             var style = new UntexturedStyle(_spriteBatch)
             {
                 Font = new GenericSpriteFont(Content.Load<SpriteFont>("Fonts/alagard")),
@@ -84,7 +91,9 @@ namespace Game1
             var btnMenu = new Button(Anchor.Center, new Vector2(220, 50), "Main Menu") { PositionOffset = new Vector2(0, 70) };
             var btnExitGame = new Button(Anchor.BottomCenter, new Vector2(220, 50), "Exit Game") { PositionOffset = new Vector2(0, 30) };
             var prgDeath = new Paragraph(Anchor.Center, 1, "You Died.", true) { PositionOffset = new Vector2(0,-50) };
-            
+
+            btnVictory = new Button(Anchor.TopCenter, new Vector2(700, 50), "") { PositionOffset = new Vector2(0, 90), IsHidden = true, IsDisabled = true };
+
             btnOptions.OnPressed = e =>
             {
                 pnlOptions.IsHidden = false;
@@ -146,6 +155,7 @@ namespace Game1
             UiSystem.Add("OptionsPanel", pnlOptions);
             UiSystem.Add("DefeatPanel", pnlDefeat);
             UiSystem.Add("OptionsButton",btnOptions);
+            UiSystem.Add("VictoryStatement", btnVictory);
 
             int idCount1 = 0;
             int idCount2 = 0;
@@ -230,6 +240,8 @@ namespace Game1
 
             Thread thr = new Thread(Communicator.Receive);
             thr.Start();
+
+            StartMenu.champion = "none";
         }
 
         protected override void Update(GameTime gameTime)
@@ -248,6 +260,16 @@ namespace Game1
                 sprite.Update(gameTime);
             }
             Communicator.newPlayerMutex.ReleaseMutex();
+
+            if(!btnVictory.IsHidden)
+            {
+                vicTimeCount += gameTime.ElapsedGameTime.TotalSeconds;
+                if(vicTimeCount >= 5)
+                {
+                    vicTimeCount = 0;
+                    btnVictory.IsHidden = true;
+                }
+            }
 
             base.Update(gameTime);
         }

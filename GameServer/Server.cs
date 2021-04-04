@@ -101,7 +101,7 @@ namespace GameServer
             return chain.Substring(0, chain.Length - 1); 
         }
 
-        public void DetectCollsions(Player attacker)
+        public void DetectCollsions(Player attacker, NetworkStream stream)
         {
             Vector2 tmpDef = new Vector2();
             Vector2 tmpAtk = new Vector2();
@@ -121,6 +121,8 @@ namespace GameServer
                             SendHurt(defender);
                             defender.Stun = true;
                             defender.Health -= 10;
+                            if (defender.Health == 0)
+                                SendVictory(attacker, stream);
                             attain = true;
                         }
                         if (attain) break;
@@ -205,6 +207,11 @@ namespace GameServer
             Send("600" + player.chunk, stream);
         }
 
+        public void SendVictory(Player player, NetworkStream stream)
+        {
+            Send("909" + player.chunk, stream);
+        }
+
         public void sendCancel(Player player)
         {
             Disperse("901", player);
@@ -231,7 +238,7 @@ namespace GameServer
                 case 401:
                     player.CurrentFrame = int.Parse(chain[1]);
                     player.CurrentAnimation = setter[int.Parse(chain[2])];
-                    DetectCollsions(player);
+                    DetectCollsions(player,stream);
                     break;
                 case 100:
                     SendMovementResponse(player, chain[2], stream);

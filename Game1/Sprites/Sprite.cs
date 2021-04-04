@@ -254,6 +254,11 @@ namespace Game1
                         code = int.Parse(chain[0]);
                         switch (code)
                         {
+                            case 909:
+                                Game1.vicCount++;
+                                Game1.btnVictory.Text.Text = "Victory! You have slain the #" + Game1.vicCount + " Enemy.";
+                                Game1.btnVictory.IsHidden = false;
+                                break;
                             case 500:
                                 _hurt = true;
                                 healthBar.CurrentValue += 10;
