@@ -22,7 +22,7 @@ namespace Game1
             else
                 Champion = new Knight();
 
-            ooga = false;
+            isMain = false;
         }
 
         public override void Update(GameTime gameTime)

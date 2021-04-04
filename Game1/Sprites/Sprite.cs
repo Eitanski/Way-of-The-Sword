@@ -46,7 +46,7 @@ namespace Game1
 
         private bool[] bools = new bool[3];
 
-        public bool ooga = true;
+        public bool isMain = true;
 
         private Vector2 healthBarOffset;
 
@@ -160,14 +160,14 @@ namespace Game1
                 if (_animationManager._ended)
                 {
                     _animationManager.Stop();
-                    if(ooga) Communicator.SendEndofStun();
+                    if(isMain) Communicator.SendEndofStun();
                     _idle = true; 
                     _stun = false;
                     _attack1 = false;
                     _attack2 = false;
                     _hurt = false;
 
-                    if(_animationManager._animation.AnimationId == 15 || _animationManager._animation.AnimationId == 14 && ooga)
+                    if(_animationManager._animation.AnimationId == 15 || _animationManager._animation.AnimationId == 14 && isMain)
                     {
                         _enable = false;
                         Game1.pnlDefeat.IsHidden = false;
@@ -231,7 +231,7 @@ namespace Game1
                 {
                     _air = false;
                     Velocity = Vector2.Zero;
-                    if(ooga) Communicator.SendEndofAir();
+                    if(isMain) Communicator.SendEndofAir();
                     bools[0] = false;
                 }
             }
@@ -294,8 +294,6 @@ namespace Game1
                 }
             }
         }
-
-        public Sprite() { }
 
         public Sprite(Dictionary<string, Animation> animations, Game1.champions champ, string name)
         {
