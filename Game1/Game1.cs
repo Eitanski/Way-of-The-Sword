@@ -25,6 +25,10 @@ namespace Game1
 
         public static UiSystem UiSystem;
 
+        public static Panel pnlDefeat;
+
+        public static Panel pnlVictory;
+
         public static Dictionary<champions, Dictionary<string, Animation>> animations;
 
         public static List<Sprite> sprites;
@@ -46,8 +50,7 @@ namespace Game1
         {
             base.OnExiting(sender, args);
             Communicator.SendExit();
-            Communicator.clientShutDown();
-            System.Environment.Exit(0);
+            //System.Environment.Exit(0);
         }
 
         protected override void LoadContent()
@@ -72,20 +75,25 @@ namespace Game1
             var btnOptions = new Button(Anchor.TopLeft, new Vector2(200, 50), "Options") { PositionOffset = new Vector2(15, 15) };
             var btnHitbox = new Button(Anchor.TopLeft, new Vector2(220, 50), "HitboxLayout:") { PositionOffset = new Vector2(25, 25)};
             var prgHitbox = new Paragraph(Anchor.TopRight, 1, "Off", true) { PositionOffset = new Vector2(25, 33) };
-            var btnExit = new Button(Anchor.Center, new Vector2(220, 50), "Exit Game") { PositionOffset = new Vector2(0, -70)};
+            var btnExit = new Button(Anchor.Center, new Vector2(220, 50), "Exit Game") { PositionOffset = new Vector2(0, 0)};
             var btnOk = new Button(Anchor.BottomCenter, new Vector2(220, 50), "Ok") { PositionOffset = new Vector2(0, 30)};
+            var btnMainMenu = new Button(Anchor.Center, new Vector2(220, 50), "Main Menu") { PositionOffset = new Vector2(0, -70) };
 
+            pnlDefeat = new Panel(Anchor.Center, new Vector2(350, 400), positionOffset: Vector2.Zero) { IsHidden = true };
+            var prgDefeat = new Paragraph(Anchor.TopCenter, 1, "Defeat", true) { PositionOffset = new Vector2(0, 33) };
+            var btnMenu = new Button(Anchor.Center, new Vector2(220, 50), "Main Menu") { PositionOffset = new Vector2(0, 70) };
+            var btnExitGame = new Button(Anchor.BottomCenter, new Vector2(220, 50), "Exit Game") { PositionOffset = new Vector2(0, 30) };
+            var prgDeath = new Paragraph(Anchor.Center, 1, "You Died.", true) { PositionOffset = new Vector2(0,-50) };
+            
             btnOptions.OnPressed = e =>
             {
                 pnlOptions.IsHidden = false;
-                foreach (var child in pnlOptions.GetChildren()) child.IsHidden = false;
                 btnOptions.IsDisabled = true;
             };
 
             btnOk.OnPressed = e =>
             {
                 pnlOptions.IsHidden = true;
-                foreach (var child in pnlOptions.GetChildren()) child.IsHidden = true;
                 btnOptions.IsDisabled = false;
             };
 
@@ -105,6 +113,23 @@ namespace Game1
 
             btnExit.OnPressed = e =>
             {
+                Communicator.ExitSoftware = true;
+                Exit();
+            };
+
+            btnExitGame.OnPressed = e =>
+            {
+                Communicator.ExitSoftware = true;
+                Exit();
+            };
+
+            btnMenu.OnPressed = e =>
+            {
+                Exit();
+            };
+
+            btnMainMenu.OnPressed = e =>
+            {
                 Exit();
             };
 
@@ -112,7 +137,14 @@ namespace Game1
             pnlOptions.AddChild(prgHitbox);
             pnlOptions.AddChild(btnExit);
             pnlOptions.AddChild(btnOk);
+            pnlOptions.AddChild(btnMainMenu);
+            pnlDefeat.AddChild(btnMenu);
+            pnlDefeat.AddChild(prgDefeat);
+            pnlDefeat.AddChild(btnExitGame);
+            pnlDefeat.AddChild(prgDeath);
+
             UiSystem.Add("OptionsPanel", pnlOptions);
+            UiSystem.Add("DefeatPanel", pnlDefeat);
             UiSystem.Add("OptionsButton",btnOptions);
 
             int idCount1 = 0;
@@ -134,7 +166,10 @@ namespace Game1
                  { "Attack_Right", new Animation(Content.Load<Texture2D>("Feng/Attack_Right"), 12, idCount1++) },
                  { "Attack1_Left", new Animation(Content.Load<Texture2D>("Feng/Attack1_Left"), 6, idCount1++) },
                  { "Attack_Left", new Animation(Content.Load<Texture2D>("Feng/Attack_Left"), 12, idCount1++) },
-                 { "Take_Hit", new Animation(Content.Load<Texture2D>("Feng/Take_Hit"), 4, idCount1++) }} },
+                 { "Hurt_Right", new Animation(Content.Load<Texture2D>("Feng/Hurt_Right"), 4, idCount1++) },
+                 { "Hurt_Left", new Animation(Content.Load<Texture2D>("Feng/Hurt_Left"), 4, idCount1++) },
+                 { "Death_Right", new Animation(Content.Load<Texture2D>("Feng/Death_Right"), 6, idCount1++) },
+                 { "Death_Left", new Animation(Content.Load<Texture2D>("Feng/Death_Left"), 6, idCount1++) }} },
 
                 {champions.Knight, new Dictionary<string, Animation>()
 
@@ -150,7 +185,10 @@ namespace Game1
                  { "Attack_Right", new Animation(Content.Load<Texture2D>("Knight/Attack_Right"), 6, idCount2++) },
                  { "Attack1_Left", new Animation(Content.Load<Texture2D>("Knight/Attack1_Left"), 6, idCount2++) },
                  { "Attack_Left", new Animation(Content.Load<Texture2D>("Knight/Attack_Left"), 6, idCount2++) },
-                 { "Take_Hit", new Animation(Content.Load<Texture2D>("Knight/Take_Hit"), 3, idCount2++) }}}
+                 { "Hurt_Right", new Animation(Content.Load<Texture2D>("Knight/Hurt_Right"), 3, idCount2++) },
+                 { "Hurt_Left", new Animation(Content.Load<Texture2D>("Knight/Hurt_Left"), 3, idCount2++) },
+                 { "Death_Right", new Animation(Content.Load<Texture2D>("Knight/Death_Right"), 10, idCount2++) },
+                 { "Death_Left", new Animation(Content.Load<Texture2D>("Knight/Death_Left"), 10, idCount2++) }} }
             };
 
             hitBoxManager.AquireData(GraphicsDevice);
@@ -158,10 +196,9 @@ namespace Game1
             background = new Sprite(Content.Load<Texture2D>("maps/pixel hills"));
 
             Feng.ground = new Vector2(100, GraphicsDevice.Viewport.Height - 270);
-            Knight.ground = new Vector2(100, GraphicsDevice.Viewport.Height - 130);
+            Knight.ground = new Vector2(100, GraphicsDevice.Viewport.Height - 130); // 200
 
             champions champ = StartMenu.champion == "feng" ? champions.Feng : champions.Knight;
-
             Character character;
             Vector2 g;
 
@@ -176,9 +213,11 @@ namespace Game1
                 g = Knight.ground;
             }
 
+            Communicator.SetGround(g.Y);
+
             sprites = new List<Sprite>()
             {
-                new Sprite(animations[champ],champ)
+                new Sprite(animations[champ],champ,StartMenu.nickName)
                 {
                 Position = new Vector2(g.X, g.Y),
                 Id = Communicator.ClientId,

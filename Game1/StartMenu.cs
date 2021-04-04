@@ -22,6 +22,8 @@ namespace Game1
 
         public UiSystem UiSystem;
 
+        public static string nickName = "";
+
         public static string champion = "none";
 
         public StartMenu()
@@ -63,12 +65,13 @@ namespace Game1
             {
                 Font = new GenericSpriteFont(Content.Load<SpriteFont>("Fonts/alagard")),
                 TextScale = 2.25f,
+                TextFieldTexture = new NinePatch(new TextureRegion(tex, 24, 8, 16, 16), 4),
                 PanelTexture = new NinePatch(new TextureRegion(tex, 0, 8, 24, 24), 8),
                 ButtonTexture = new NinePatch(new TextureRegion(tex, 24, 8, 16, 16), 4),
                 ScrollBarBackground = new NinePatch(new TextureRegion(tex, 12, 0, 4, 8), 1, 1, 2, 2),
                 ScrollBarScrollerTexture = new NinePatch(new TextureRegion(tex, 8, 0, 4, 8), 1, 1, 2, 2)
             };
-
+            
             UiSystem = new UiSystem(Window, GraphicsDevice, style);
             titleUi = new UiSystem(Window, GraphicsDevice, titleStyle);
 
@@ -105,23 +108,43 @@ namespace Game1
                 PositionOffset = new Vector2(0, 35)
             };
             var prgPlayers = new Paragraph(Anchor.Center, 1, "Select your Champion", true) { PositionOffset = new Vector2(0, -120), IsHidden = true };
+            var btnProceed = new Button(Anchor.BottomCenter, new Vector2(200, 50), "Proceed") { IsHidden = true,PositionOffset = new Vector2(0, 35) };
+            var prgNickName = new Paragraph(Anchor.Center, 1, "Enter your Name", true) { PositionOffset = new Vector2(-19, -80), IsHidden = true };
+            var txtBoxNickName = new TextField(Anchor.Center, new Vector2(400, 50)) { IsHidden = true, PositionOffset = new Vector2(0, 30)};
+            
             var btnBack = new Button(Anchor.TopRight, new Vector2(200, 50), "Back")
             {
                 IsHidden = true,
                 PositionOffset = new Vector2(15, 15),
                 OnPressed = e =>
                 {
-                    prgTitle.IsHidden = false;
-                    prgSubTitle.IsHidden = false;
-                    prgAuthor.IsHidden = false;
-                    e.IsHidden = true;
-                    btnPlay.IsHidden = false;
-                    prgPlayers.IsHidden = true;
-                    imgFeng.IsHidden = true;
-                    imgKnight.IsHidden = true;
-                    btnFight.IsHidden = true;
-                    btnFeng.IsHidden = true;
-                    btnKnight.IsHidden = true;
+                    if(!btnFight.IsHidden) // champion select screen
+                    {
+
+                        btnProceed.IsHidden = false;
+                        txtBoxNickName.IsHidden = false;
+                        prgNickName.IsHidden = false;
+                        e.IsHidden = false;
+
+                        prgPlayers.IsHidden = true;
+                        imgFeng.IsHidden = true;
+                        imgKnight.IsHidden = true;
+                        btnFight.IsHidden = true;
+                        btnFeng.IsHidden = true;
+                        btnKnight.IsHidden = true;
+                    }
+                    else
+                    {
+                        prgTitle.IsHidden = false;
+                        prgSubTitle.IsHidden = false;
+                        prgAuthor.IsHidden = false;
+                        btnPlay.IsHidden = false;
+                        btnProceed.IsHidden = true;
+                        txtBoxNickName.IsHidden = true;
+                        prgNickName.IsHidden = true;
+                        e.IsHidden = true;
+                    }
+                    
                 }
             };
 
@@ -132,12 +155,26 @@ namespace Game1
                 prgAuthor.IsHidden = true;
                 e.IsHidden = true;
                 btnBack.IsHidden = false;
-                prgPlayers.IsHidden = false;
-                imgFeng.IsHidden = false;
-                imgKnight.IsHidden = false;
-                btnFight.IsHidden = false;
-                btnFeng.IsHidden = false;
-                btnKnight.IsHidden = false;
+                btnProceed.IsHidden = false;
+                txtBoxNickName.IsHidden = false;
+                prgNickName.IsHidden = false;
+            };
+
+            btnProceed.OnPressed = e =>
+            {
+                if(!txtBoxNickName.Text.Equals(""))
+                {
+                    prgPlayers.IsHidden = false;
+                    imgFeng.IsHidden = false;
+                    imgKnight.IsHidden = false;
+                    btnFight.IsHidden = false;
+                    btnFeng.IsHidden = false;
+                    btnKnight.IsHidden = false;
+                    btnProceed.IsHidden = true;
+                    txtBoxNickName.IsHidden = true;
+                    prgNickName.IsHidden = true;
+                    nickName = txtBoxNickName.Text;    
+                }
             };
 
             btnFeng.OnPressed = e =>
@@ -179,7 +216,8 @@ namespace Game1
                     UiSystem.Dispose();
                     titleUi.Dispose();
                     Exit();
-                    Communicator.Setup(champion);
+                    Communicator.Setup(champion,nickName);
+                    champion = "none";
                 }
             };
 
@@ -193,6 +231,9 @@ namespace Game1
             panel.AddChild(btnFeng);
             panel.AddChild(btnKnight);
             panel.AddChild(btnPlay);
+            panel.AddChild(txtBoxNickName);
+            panel.AddChild(btnProceed);
+            panel.AddChild(prgNickName);
 
             UiSystem.Add("StartMenu", panel);
         }

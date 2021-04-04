@@ -26,8 +26,10 @@ namespace Game1
 
         protected Texture2D _texture;
 
-        private bool _air = false; 
-            
+        private bool _air = false;
+
+        private bool _enable = true;
+        
         private float _relativePos;
 
         public bool _direction = true; // right - true, left - false
@@ -49,8 +51,6 @@ namespace Game1
         private Vector2 healthBarOffset;
 
         private Vector2 nickNameOffset;
-
-        //public Game1.champions champ;
 
         #endregion
 
@@ -128,18 +128,28 @@ namespace Game1
             {
                 _stun = true;
                 if (!_direction)
-                {
                     _animationManager.Play(_animations["Attack_Left"]);
-                }
                 else
-                {
                     _animationManager.Play(_animations["Attack_Right"]);
-                }
             }
             else if(_hurt && !_stun)
             {
-                _stun = true;
-                _animationManager.Play(_animations["Take_Hit"]);
+                if (healthBar.CurrentValue == healthBar.MaxValue)
+                {
+                    _stun = true;
+                    if (!_direction)
+                        _animationManager.Play(_animations["Death_Left"]);
+                    else
+                        _animationManager.Play(_animations["Death_Right"]);
+                }
+                else
+                {
+                    _stun = true;
+                    if (!_direction)
+                        _animationManager.Play(_animations["Hurt_Left"]);
+                    else
+                        _animationManager.Play(_animations["Hurt_Right"]);
+                }
             }
         }
 
@@ -156,6 +166,15 @@ namespace Game1
                     _attack1 = false;
                     _attack2 = false;
                     _hurt = false;
+
+                    if(_animationManager._animation.AnimationId == 15 || _animationManager._animation.AnimationId == 14 && ooga)
+                    {
+                        _enable = false;
+                        Game1.pnlDefeat.IsHidden = false;
+                        healthBar.IsHidden = true;
+                        nickName.IsHidden = true;
+                        Communicator.SendExit();
+                    }
 
                     bools[2] = false;
                     bools[1] = false;
@@ -273,10 +292,12 @@ namespace Game1
 
         public Sprite() { }
 
-        public Sprite(Dictionary<string, Animation> animations, Game1.champions champ)
+        public Sprite(Dictionary<string, Animation> animations, Game1.champions champ, string name)
         {
             _animations = animations;
             _animationManager = new AnimationManager(_animations.First().Value);
+
+            nickName.Text = name;
 
             if (champ == Game1.champions.Feng)
             {
@@ -303,34 +324,28 @@ namespace Game1
 
         public virtual void Update(GameTime gameTime)
         {
-            DoAction();
+            if (_enable)
+            {
+                DoAction();
 
-            SetAnimations();
+                SetAnimations();
 
-            setComplexAnimations();
+                setComplexAnimations();
 
-            _animationManager.Update(gameTime);
+                _animationManager.Update(gameTime);
 
-            Retrieve();
-            
-            Position += Velocity;
+                Retrieve();
 
-            UpdateMiscs();
+                Position += Velocity;
 
-            Velocity.X = 0;
+                UpdateMiscs();
+
+                Velocity.X = 0;
+            }
 
         }
 
         #endregion
-
-        private void fillArray(bool[] arr)
-        {
-            for (int i = 0; i < arr.Length; i++)
-            {
-                arr[i] = false;
-            }
-        }
-
     }
 
 

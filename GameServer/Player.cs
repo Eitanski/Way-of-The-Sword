@@ -16,13 +16,7 @@ namespace GameServer
         public Champions champ;
         public int CurrentFrame { get; set; }
         public string CurrentAnimation { get; set; } = "Idle_Right";
-
-        private float _relativePos;
-
-        private bool _attack1 = false;
-
-        private bool _attack2 = false;
-
+        public string nickName { get; set; }
         public int Health { get; set; } = 100;
 
         public float Speed = 5f;
@@ -45,8 +39,6 @@ namespace GameServer
         public bool Direction { get; set; } = true; // right - true, left - false
 
         public bool Aggro { get; set; } = false;
-
-        public bool UnderAttack { get; set; } = false;
 
         public bool Alive { get; set; } = true;
 

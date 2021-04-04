@@ -13,14 +13,17 @@ namespace Game1
         static void Main()
         {
             TextInputWrapper.Current = new TextInputWrapper.DesktopGl<TextInputEventArgs>((w, c) => w.TextInput += c);
+            
+            while (!Communicator.ExitSoftware)
+            {
+                using (var startMenu = new StartMenu())
+                    startMenu.Run();
 
-            using (var startMenu = new StartMenu())
-                startMenu.Run();
+                if (StartMenu.champion == "none") System.Environment.Exit(0);
 
-            if(StartMenu.champion == "none") System.Environment.Exit(0);
-
-            using (var game = new Game1())
-                game.Run();
+                using (var game = new Game1())
+                    game.Run();
+            }
         }
     }
 }

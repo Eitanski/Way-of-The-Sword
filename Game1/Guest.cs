@@ -10,10 +10,12 @@ using System.Linq;
 namespace Game1
 {
     class Guest : Sprite
-    {      
-        public Guest(Dictionary<string, Animation> animations, bool dir, Game1.champions champ) : base(animations, champ)
+    {
+        public Guest(Dictionary<string, Animation> animations, bool dir, Game1.champions champ, string name, float hp) : base(animations, champ, name)
         {
             _direction = dir;
+
+            healthBar.CurrentValue = 100 - hp;
 
             if (champ == Game1.champions.Feng)
                 Champion = new Feng();

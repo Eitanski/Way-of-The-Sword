@@ -30,7 +30,10 @@ namespace GameServer
              "Attack_Right",
              "Attack1_Left",
              "Attack_Left",
-             "Take_Hit"};        
+             "Hurt_Right",
+             "Hurt_Left",
+             "Death_Right",
+             "Death_Left"};        
         public void Run()
         {
             TcpListener serverSocket = new TcpListener(IPAddress.Parse("127.0.0.1"), 11111);
@@ -45,12 +48,12 @@ namespace GameServer
                 clientSocket = serverSocket.AcceptTcpClient();
                 tmpChampMsg = Receive(clientSocket).Split(new char[] { '&' });
                 if(tmpChampMsg[1] == "1")
-                    players.Add(clientSocket, new Feng());
+                    players.Add(clientSocket, new Feng() { nickName = tmpChampMsg[2]});
                 else
-                    players.Add(clientSocket, new Knight());
+                    players.Add(clientSocket, new Knight() { nickName = tmpChampMsg[2]});
                 SendId(players[clientSocket], clientSocket.GetStream());
                 UpdateId();
-                Console.WriteLine("Client No: " + players[clientSocket].id.ToString() + " started! (" + tmpChampMsg[1] == "1" ? "Feng" : "Knight" + ")");
+                Console.WriteLine("Client No: " + players[clientSocket].id.ToString() + " started!");
                 Console.WriteLine("Connected to " + clientSocket.Client.RemoteEndPoint.ToString());
                 Thread newClient = new Thread(new ParameterizedThreadStart(HandleClient));
                 newClient.Start(clientSocket);
@@ -61,7 +64,7 @@ namespace GameServer
         {
             foreach (Player client in players.Values)
             {
-                Disperse("600", client, client.Position.X.ToString().Length + client.Position.X.ToString() + "1" + (client.Direction ? 1 : 0) + "1" + (client.champ == Player.Champions.Feng ? "1" : "0"));
+                Disperse("600", client, client.Position.X.ToString().Length + client.Position.X.ToString() + "1" + (client.Direction ? 1 : 0) + "1" + (client.champ == Player.Champions.Feng ? "1" : "0") + client.nickName.Length + client.nickName + client.Health.ToString().Length + client.Health);
             }
         }
 
@@ -221,6 +224,9 @@ namespace GameServer
                     player.Alive = false;
                     stream.Close();
                     players.Remove(clientSocket);
+                    break;
+                case 800:
+                    player.Position.Y = float.Parse(chain[1]);
                     break;
                 case 401:
                     player.CurrentFrame = int.Parse(chain[1]);

@@ -34,7 +34,10 @@ namespace GameServer
                  { "Attack_Right", new List<List<List<Hitbox>>>()},
                  { "Attack1_Left", new List<List<List<Hitbox>>>()},
                  { "Attack_Left", new List<List<List<Hitbox>>>() },
-                 { "Take_Hit", new List<List<List<Hitbox>>>()}
+                 { "Hurt_Right", new List<List<List<Hitbox>>>()},
+                 { "Hurt_Left", new List<List<List<Hitbox>>>()},
+                 { "Death_Left", new List<List<List<Hitbox>>>()},
+                 { "Death_Right", new List<List<List<Hitbox>>>()}
                  }},
 
                 { Player.Champions.Knight, new Dictionary<string, List<List<List<Hitbox>>>>()
@@ -51,7 +54,10 @@ namespace GameServer
                  { "Attack_Right", new List<List<List<Hitbox>>>()},
                  { "Attack1_Left", new List<List<List<Hitbox>>>()},
                  { "Attack_Left", new List<List<List<Hitbox>>>() },
-                 { "Take_Hit", new List<List<List<Hitbox>>>()}
+                 { "Hurt_Left", new List<List<List<Hitbox>>>()},
+                 { "Hurt_Right", new List<List<List<Hitbox>>>()},
+                 { "Death_Left", new List<List<List<Hitbox>>>()},
+                 { "Death_Right", new List<List<List<Hitbox>>>()}
                  }}
             };
 
@@ -69,14 +75,22 @@ namespace GameServer
             {
                 champ = types[animationData.Key];
                 tmpChamp = (JObject)jsonData[champ];
+                if(champ == "Feng")
+                {
+                    h = 400;
+                    w = 400;
+                }
+                else
+                {
+                    w = 200;
+                    h = 110;
+                }
                 foreach (var tmpAnimation in tmpChamp)
                 {
                     foreach (var frameData in tmpAnimation.Value)
                     {
                         tmpLists = new List<List<Hitbox>>();
                         tmpBoxes = new List<Hitbox>();
-                        h = 400;
-                        w = 400;
                         foreach (var greenBox in frameData["Green"])
                         {
                             tmpBoxes.Add(new Hitbox(true, (float)greenBox["X"], (float)greenBox["Y"], (float)greenBox["W"], (float)greenBox["H"], h, w));

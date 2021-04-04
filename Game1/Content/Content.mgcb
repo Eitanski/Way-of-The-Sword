@@ -61,7 +61,7 @@
 /processorParam:TextureFormat=Color
 /build:Feng/Attack1_Right.png
 
-#begin Feng/Death.png
+#begin Feng/Death_Left.png
 /importer:TextureImporter
 /processor:TextureProcessor
 /processorParam:ColorKeyColor=255,0,255,255
@@ -71,7 +71,19 @@
 /processorParam:ResizeToPowerOfTwo=False
 /processorParam:MakeSquare=False
 /processorParam:TextureFormat=Color
-/build:Feng/Death.png
+/build:Feng/Death_Left.png
+
+#begin Feng/Death_Right.png
+/importer:TextureImporter
+/processor:TextureProcessor
+/processorParam:ColorKeyColor=255,0,255,255
+/processorParam:ColorKeyEnabled=True
+/processorParam:GenerateMipmaps=False
+/processorParam:PremultiplyAlpha=True
+/processorParam:ResizeToPowerOfTwo=False
+/processorParam:MakeSquare=False
+/processorParam:TextureFormat=Color
+/build:Feng/Death_Right.png
 
 #begin Feng/Fall_Left.png
 /importer:TextureImporter
@@ -96,6 +108,30 @@
 /processorParam:MakeSquare=False
 /processorParam:TextureFormat=Color
 /build:Feng/Fall_Right.png
+
+#begin Feng/Hurt_Left.png
+/importer:TextureImporter
+/processor:TextureProcessor
+/processorParam:ColorKeyColor=255,0,255,255
+/processorParam:ColorKeyEnabled=True
+/processorParam:GenerateMipmaps=False
+/processorParam:PremultiplyAlpha=True
+/processorParam:ResizeToPowerOfTwo=False
+/processorParam:MakeSquare=False
+/processorParam:TextureFormat=Color
+/build:Feng/Hurt_Left.png
+
+#begin Feng/Hurt_Right.png
+/importer:TextureImporter
+/processor:TextureProcessor
+/processorParam:ColorKeyColor=255,0,255,255
+/processorParam:ColorKeyEnabled=True
+/processorParam:GenerateMipmaps=False
+/processorParam:PremultiplyAlpha=True
+/processorParam:ResizeToPowerOfTwo=False
+/processorParam:MakeSquare=False
+/processorParam:TextureFormat=Color
+/build:Feng/Hurt_Right.png
 
 #begin Feng/Idle_Left.png
 /importer:TextureImporter
@@ -168,30 +204,6 @@
 /processorParam:MakeSquare=False
 /processorParam:TextureFormat=Color
 /build:Feng/Run_Right.png
-
-#begin Feng/Take Hit - white silhouette.png
-/importer:TextureImporter
-/processor:TextureProcessor
-/processorParam:ColorKeyColor=255,0,255,255
-/processorParam:ColorKeyEnabled=True
-/processorParam:GenerateMipmaps=False
-/processorParam:PremultiplyAlpha=True
-/processorParam:ResizeToPowerOfTwo=False
-/processorParam:MakeSquare=False
-/processorParam:TextureFormat=Color
-/build:Feng/Take Hit - white silhouette.png
-
-#begin Feng/Take_Hit.png
-/importer:TextureImporter
-/processor:TextureProcessor
-/processorParam:ColorKeyColor=255,0,255,255
-/processorParam:ColorKeyEnabled=True
-/processorParam:GenerateMipmaps=False
-/processorParam:PremultiplyAlpha=True
-/processorParam:ResizeToPowerOfTwo=False
-/processorParam:MakeSquare=False
-/processorParam:TextureFormat=Color
-/build:Feng/Take_Hit.png
 
 #begin Fonts/alagard.spritefont
 /importer:FontDescriptionImporter
@@ -401,6 +413,30 @@
 /processorParam:TextureFormat=Color
 /build:Knight/Hurt_Left.png
 
+#begin Knight/Hurt_Left.png
+/importer:TextureImporter
+/processor:TextureProcessor
+/processorParam:ColorKeyColor=255,0,255,255
+/processorParam:ColorKeyEnabled=True
+/processorParam:GenerateMipmaps=False
+/processorParam:PremultiplyAlpha=True
+/processorParam:ResizeToPowerOfTwo=False
+/processorParam:MakeSquare=False
+/processorParam:TextureFormat=Color
+/build:Knight/Hurt_Left.png
+
+#begin Knight/Hurt_Right.png
+/importer:TextureImporter
+/processor:TextureProcessor
+/processorParam:ColorKeyColor=255,0,255,255
+/processorParam:ColorKeyEnabled=True
+/processorParam:GenerateMipmaps=False
+/processorParam:PremultiplyAlpha=True
+/processorParam:ResizeToPowerOfTwo=False
+/processorParam:MakeSquare=False
+/processorParam:TextureFormat=Color
+/build:Knight/Hurt_Right.png
+
 #begin Knight/Idle_Left.png
 /importer:TextureImporter
 /processor:TextureProcessor
@@ -472,18 +508,6 @@
 /processorParam:MakeSquare=False
 /processorParam:TextureFormat=Color
 /build:Knight/Run_Right.png
-
-#begin Knight/Take_Hit.png
-/importer:TextureImporter
-/processor:TextureProcessor
-/processorParam:ColorKeyColor=255,0,255,255
-/processorParam:ColorKeyEnabled=True
-/processorParam:GenerateMipmaps=False
-/processorParam:PremultiplyAlpha=True
-/processorParam:ResizeToPowerOfTwo=False
-/processorParam:MakeSquare=False
-/processorParam:TextureFormat=Color
-/build:Knight/Take_Hit.png
 
 #begin maps/pixel hills.png
 /importer:TextureImporter

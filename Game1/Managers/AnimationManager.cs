@@ -70,7 +70,7 @@ namespace Game1
 
                 _animation.CurrentFrame++;
 
-                if (_animation.CurrentFrame >= _animation.FrameCount)
+                if (_animation.CurrentFrame >= _animation.FrameCount - 1)
                 {
                     _animation.CurrentFrame = 0;
                     _ended = true;

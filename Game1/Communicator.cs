@@ -7,16 +7,20 @@ using System.Net;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
+using MLEM.Ui;
+using MLEM.Ui.Elements;
 
 namespace Game1
 {
     static class Communicator
     {
-        private static TcpClient client = new TcpClient();
+        private static TcpClient client;
+
+        public static bool ExitSoftware = false;
 
         private static NetworkStream stream;
 
-        private static Dictionary<int, Tuple<Mutex, Queue<string[]>>> coms = new Dictionary<int, Tuple<Mutex, Queue<string[]>>>();
+        private static Dictionary<int, Tuple<Mutex, Queue<string[]>>> coms; 
 
         public static int ClientId = 0;
 
@@ -24,9 +28,11 @@ namespace Game1
 
         private static bool banish = false;
 
+        public static bool alive = true;
+
         public static string chunk;
 
-        public static Mutex newPlayerMutex = new Mutex();
+        public static Mutex newPlayerMutex;
 
         public static void clientShutDown()
         {
@@ -34,6 +40,15 @@ namespace Game1
             client.Close();
         }
 
+        public static void init()
+        {
+            client = new TcpClient();
+            coms = new Dictionary<int, Tuple<Mutex, Queue<string[]>>>();
+            newPlayer = false;
+            banish = false;
+            alive = true;
+            newPlayerMutex = new Mutex();
+        }
         static public Dictionary<string, Animation> CloneAnimations(Dictionary<string, Animation> input)
         {
             Dictionary<string, Animation> result = new Dictionary<string, Animation>();
@@ -43,20 +58,22 @@ namespace Game1
             }
             return result;
         }
-        public static void Setup(string champion)
+        public static void Setup(string champion, string nickName)
         {
             byte[] buffer = new byte[8];
             try
             {
+                init();
                 client.Connect("127.0.0.1", 11111);
                 stream = client.GetStream();
-                SendChampion(champion);
+                SendChampion(champion, nickName);
                 string[] response = Parse(buffer).Split(new char[] { '&' }); // receiving id
                 newPlayer = false; 
                 ClientId = int.Parse(response[1]);
                 coms.Add(ClientId, new Tuple<Mutex, Queue<string[]>>(new Mutex(), new Queue<string[]>()));
                 chunk = ClientId.ToString().Length + ClientId.ToString();
                 Console.WriteLine("client number " + response[1] + " connected to: " + client.Client.RemoteEndPoint.ToString());
+                alive = true;
             }
             catch (Exception e)
             {
@@ -122,7 +139,7 @@ namespace Game1
             string chainer;
             Game1.champions tmpChamp;
             Vector2 ground;
-            while (true)
+            while (alive)
             {
                 chainer = Parse(buffer);
                 chain = chainer.Split(new char[] { '&' });
@@ -134,11 +151,11 @@ namespace Game1
                         newPlayerMutex.WaitOne();
                         tmpChamp = chain[4] == "1" ? Game1.champions.Feng : Game1.champions.Knight;
                         ground = tmpChamp == Game1.champions.Feng ? Feng.ground : Knight.ground;
-                        Game1.sprites.Add(new Guest(CloneAnimations(Game1.animations[tmpChamp]), chain[3] == "1", tmpChamp)
+                        Game1.sprites.Add(new Guest(CloneAnimations(Game1.animations[tmpChamp]), chain[3] == "1", tmpChamp, chain[5],float.Parse(chain[6]))
                         {
                             Position = new Vector2(float.Parse(chain[2]), ground.Y),
                             Id = tmpId
-                        }) ;
+                        });
                         Game1.UiSystem.Add(tmpId.ToString() + "h",Game1.sprites[Game1.sprites.Count - 1].healthBar);
                         Game1.UiSystem.Add(tmpId.ToString() + "n", Game1.sprites[Game1.sprites.Count - 1].nickName);
                         newPlayerMutex.ReleaseMutex();  
@@ -148,18 +165,28 @@ namespace Game1
                 }
                 else if (banish)
                 {
-                    newPlayerMutex.WaitOne();
-                    foreach(Sprite sprite in Game1.sprites)
+                    if (ClientId == tmpId)
                     {
-                        if (sprite.Id == tmpId)
-                        {
-                            coms.Remove(tmpId);
-                            Game1.sprites.Remove(sprite);
-                            break;
-                        }
+                        clientShutDown();
+                        alive = false;
                     }
-                    banish = false;
-                    newPlayerMutex.ReleaseMutex();
+                    else
+                    {
+                        newPlayerMutex.WaitOne();
+                        foreach (Sprite sprite in Game1.sprites)
+                        {
+                            if (sprite.Id == tmpId)
+                            {
+                                coms.Remove(tmpId);
+                                Game1.sprites.Remove(sprite);
+                                sprite.healthBar.IsHidden = true;
+                                sprite.nickName.IsHidden = true;
+                                break;
+                            }
+                        }
+                        banish = false;
+                        newPlayerMutex.ReleaseMutex();
+                    }
                 }
                 else
                 {
@@ -207,12 +234,19 @@ namespace Game1
 
         public static void SendExit()
         {
-            Send("900" + chunk);
+            if (alive)
+                Send("900" + chunk);
+            alive = false;
         }
 
-        public static void SendChampion(string champ)
+        public static void SendChampion(string champ,string name)
         {
-            Send("700" + (champ == "feng" ? 1 : 0) + chunk);
+            Send("700" + "1" + (champ == "feng" ? 1 : 0) + name.Length + name + chunk);
+        }
+
+        public static void SetGround(float y)
+        {
+            Send("800"  + y.ToString().Length + y.ToString());
         }
     }
 }
