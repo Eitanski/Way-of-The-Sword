@@ -15,7 +15,6 @@ namespace GameServer
     {
         private Dictionary<TcpClient, Player> players = new Dictionary<TcpClient,Player>();
         private HitboxManager hitboxManager = new HitboxManager();
-        private Mutex collisionMutex = new Mutex();
 
         private string[] setter = new string[] {
             "Run_Left", 

@@ -25,8 +25,6 @@ namespace GameServer
 
         public Vector2 Position = new Vector2(100, 0);
 
-        public Vector2 Acceleration = new Vector2(0f, 2f);
-
         public bool Stun = false;
 
         public bool Air = false;

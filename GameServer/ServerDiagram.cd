@@ -1,28 +1,35 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <ClassDiagram MajorVersion="1" MinorVersion="1">
   <Class Name="GameServer.Feng">
-    <Position X="2.25" Y="0.5" Width="1.5" />
+    <Position X="7" Y="4.75" Width="1.5" />
     <TypeIdentifier>
       <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAEAAAAAAAAAA=</HashCode>
       <FileName>Feng.cs</FileName>
     </TypeIdentifier>
   </Class>
   <Class Name="GameServer.Hitbox">
-    <Position X="5.75" Y="0.5" Width="1.5" />
+    <Position X="7" Y="0.5" Width="1.5" />
     <TypeIdentifier>
       <HashCode>AAAAAAAABIAAAAAAAAAAAEAAAAAAAAAAAAAAAAAAgAA=</HashCode>
       <FileName>Hitbox.cs</FileName>
     </TypeIdentifier>
   </Class>
   <Class Name="GameServer.HitboxManager">
-    <Position X="7.5" Y="0.5" Width="1.5" />
+    <Position X="10.5" Y="0.5" Width="1.5" />
     <TypeIdentifier>
       <HashCode>ABAAAAAAAAAAACAAAAAAAAAAAAAAABAAAAAAAAIAAAA=</HashCode>
       <FileName>HitboxManager.cs</FileName>
     </TypeIdentifier>
   </Class>
+  <Class Name="GameServer.Knight">
+    <Position X="7" Y="3" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAEAAAAAAAAAA=</HashCode>
+      <FileName>Knight.cs</FileName>
+    </TypeIdentifier>
+  </Class>
   <Class Name="GameServer.Player">
-    <Position X="0.5" Y="0.5" Width="1.5" />
+    <Position X="5" Y="0.5" Width="1.5" />
     <NestedTypes>
       <Enum Name="GameServer.Player.Champions" Collapsed="true">
         <TypeIdentifier>
@@ -31,21 +38,21 @@
       </Enum>
     </NestedTypes>
     <TypeIdentifier>
-      <HashCode>AACAAAEAAIBAAAAkBSAAAEABAAAAAggAEAAEAwAEAiA=</HashCode>
+      <HashCode>AACACAAAAIBAAAA0BSAAAAABAQAAAAwAEAAEAgAEAiA=</HashCode>
       <FileName>Player.cs</FileName>
     </TypeIdentifier>
   </Class>
   <Class Name="GameServer.Program">
-    <Position X="9.25" Y="0.5" Width="1.5" />
+    <Position X="8.75" Y="0.5" Width="1.5" />
     <TypeIdentifier>
       <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAABAAAAAA=</HashCode>
       <FileName>Program.cs</FileName>
     </TypeIdentifier>
   </Class>
   <Class Name="GameServer.Server">
-    <Position X="4" Y="0.5" Width="1.5" />
+    <Position X="12.25" Y="0.5" Width="1.5" />
     <TypeIdentifier>
-      <HashCode>AgAAQAAAQAAAAAAAAECAAAAgAAAIIAAQJJABggAAAAo=</HashCode>
+      <HashCode>AgAAQAAAQQAAAAAAAEDAAAAgAAAIIAAQJJAAggAAAAo=</HashCode>
       <FileName>Server.cs</FileName>
     </TypeIdentifier>
   </Class>

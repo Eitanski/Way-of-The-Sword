@@ -17,7 +17,7 @@ namespace Game1
             types = new Dictionary<Game1.champions, string>() { { Game1.champions.Feng, "Feng" }, { Game1.champions.Ronin, "Ronin" }, { Game1.champions.Knight, "Knight" } };
         }
 
-        public void AquireData(GraphicsDevice dev) // for each animation
+        public void AquireData(GraphicsDevice dev) 
         {
             JObject tmpChamp;
             string champ;
