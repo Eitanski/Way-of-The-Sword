@@ -222,7 +222,6 @@ namespace GameServer
             string[] chain = req.Split(new char[]{'&'});
             int code = int.Parse(chain[0]);
             Player player = players[clientSocket];
-            //if(player.id == 1 && code != 401) Console.WriteLine("request from client: " + req + " " + player.CurrentAnimation);
             switch (code)
             {
                 case 900:
