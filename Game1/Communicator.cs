@@ -97,7 +97,6 @@ namespace Game1
         {
             try
             {
-                //if(msg.Substring(0,3) != "401") Console.WriteLine("sent from client " + msg);
                 byte[] message = Encoding.ASCII.GetBytes(msg + "1" + "e");
                 stream.Write(message, 0, message.Length);
                 stream.Flush();

@@ -54,7 +54,6 @@ namespace Game1
         {
             base.OnExiting(sender, args);
             Communicator.SendExit();
-            //System.Environment.Exit(0);
         }
 
         protected override void LoadContent()

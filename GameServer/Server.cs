@@ -146,7 +146,6 @@ namespace GameServer
             try
             {
                 byte[] message = Encoding.ASCII.GetBytes(msg + "1" + "e");
-                //Console.WriteLine("Sent from server: " + msg);
                 stream.Write(message, 0, message.Length);
                 stream.Flush();
             }

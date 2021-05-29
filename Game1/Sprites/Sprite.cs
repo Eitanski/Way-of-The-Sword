@@ -32,7 +32,8 @@ namespace Game1
         
         private float _relativePos;
 
-        public bool _direction = true; // right - true, left - false
+        public bool _direction = true; 
+        right - true, left - false
 
         private bool _stun = false;
 
